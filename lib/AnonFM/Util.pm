@@ -75,5 +75,62 @@ sub parseFilename {
     return ($dj, $timestamp);
 }
 
+=head2 parseSchedules (\%schedule, $source_text)
+
+
+Fill hash %schedule with timestamp => {dj =>"..", desc => "..", duration => ".."} from $source_text
+
+=cut
+
+sub parseSchedules {
+    my $res      = shift;
+    my $shed_all = shift;
+
+    # parse schedule content: example of content:
+    # <span class="timestamp">[2012 Ср, 7 мaрта, 20:00...20:59]</span>  —  <span class="dj">Внучаев</span>: Школьники против суицидов<br>
+    my @moy =
+      qw(января февраля марта апреля мая июня июля августа сентября октября ноября декабря);
+    my %MoY = map { $moy[$_] => $_ } ( 0 .. scalar(@moy) - 1 );
+
+    while ( $shed_all =~
+m!<span class="timestamp">\[(.*?)\]</span>  —  <span class="dj">(.*?)</span>: (.*?)<br>!g
+      )
+    {
+        my ( $timestr, $dj, $desc ) = ( $1, $2, $3 );
+
+        # parse timestamps
+        if (
+            my ( $year, $day, $month, $hr_start, $min_start, $hr_end, $min_end )
+            = $timestr =~
+            m/(\d{4}) \w+, (\d+) (\w+), (\d\d):(\d\d)...(\d\d):(\d\d)/ ) {
+
+            $month =~ tr(abvgdzijklmnoprstufhc)
+                        (абвгдзийклмнопрстуфхц);
+
+            $month = $MoY{ lc($month) };
+            my $timestamp;
+            eval {
+                $timestamp =
+                  timelocal( 0, $min_start, $hr_start, $day, $month, $year );
+            };
+            die "parse date error: $timestr\n $@" if ($@);
+
+            my $start = $hr_start * 60 + $min_start;    # hh:min
+            my $end   = $hr_end * 60 + $min_end;
+            my $len   = $end - $start;
+            $len = ( 24 * 60 + $end ) - $start
+              if ( $start > $end );                     # 01:00 - 23:00
+            $len *= 60;                                 # in seconds
+            $res->{$timestamp} = {
+                dj           => $dj,
+                desc         => $desc,
+                duration     => $len
+            };
+        }
+        else {
+            die "Time stamp not parsed: $timestr - $dj - $desc\n";
+        }
+    }
+}
 
 1;
