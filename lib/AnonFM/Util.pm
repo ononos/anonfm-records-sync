@@ -145,7 +145,7 @@ Return array of {filename => '..', size => '..'}
 sub parseAnonFMrecords {
     my $source = shift;
 
-    my @res;
+    my @files;
 
     if ($source =~ m|onclick=['"]showPlayer\(this\);return false['"]>|) {
         # looks like anon.fm/records.html
@@ -162,10 +162,10 @@ sub parseAnonFMrecords {
             } else {
                 $size = 0;
             }
-            push (@res, {filename => $filename, size => $size});
+            push (@files, {filename => $filename, size => $size});
         }
     }
-    return @res;
+    return @files;
 }
 
 =head2 parseApacheIndex($htmlpage)
@@ -178,7 +178,7 @@ Return array of {filename => '..', size => '..'}
 
 sub parseApacheIndex {
     my $source = shift;
-    my @res;
+    my @files;
 
     if ($source =~m|<tr><td valign="top"><img.*?</td><td>&nbsp;</td></tr>|) {
         while ($source =~ m|<td><a href=".*?">([^/].*?)</a></td><td align="right">.*?</td><td align="right">(.*?)</td>|g) {
@@ -197,10 +197,39 @@ sub parseApacheIndex {
             else {
                 $size = int($size);
             }
-            push( @res, { filename => $filename, size => $size } );
+            push( @files, { filename => $filename, size => $size } );
        }
     }
-    return @res;
+    return @files;
+}
+
+=head2 parseGoogleDrivePage($htmlpage)
+
+Parse google drive html page.
+
+Return
+
+     {
+       files => [{filename => '..', id => '..google id..'}, ..],
+       folders => [{filename => '..', id => '..google id..'}, ..]
+     }
+
+=cut
+
+sub parseGoogleDrivePage {
+    my $html = shift;
+    my (@files, @folders);
+
+    while ($html =~m |<div class="flip-entry" id="entry-(.*?)" tabindex="0" role="link">.*?<div class="flip-entry-list-icon">(.*?)<div class="flip-entry-title">(.*?)</div>|g) {
+        my ($newID, $typeStr, $filename) = ($1, $2, $3);
+        # does it folder
+        if (index ($typeStr, 'drive-sprite-folder-list-shared-icon') >=0) {
+            push @folders, {filename => $filename, id => $newID};
+        } else {
+            push @files, {filename => $filename, id => $newID};
+        }
+    }
+    return {files => \@files, folders => \@folders};
 }
 
 1;
