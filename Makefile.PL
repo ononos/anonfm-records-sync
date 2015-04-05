@@ -12,7 +12,8 @@ WriteMakefile(
         'String::ShellQuote' => '0',
         'IPC::Cmd'           => '0',
         'Path::Tiny'         => 0,
-        'Mojolicious'        => 0
+        'Mojolicious'        => 0,
+        'MongoDB'            => "0.702.2"
       },
 
 );
