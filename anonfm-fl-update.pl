@@ -70,6 +70,11 @@ use Mojo::UserAgent;
 
 use AnonFM::Util;
 
+use Data::Dumper;
+
+# prevent Wide character warning
+binmode(STDOUT,':utf8');
+
 my $HELP = 0;
 my $MANUAL = 0;
 my $SCAN = 0;
@@ -116,11 +121,20 @@ if ( $MONGO_URL =~ m|mongodb://(.*?):(.*?)@(.*?):(.*?)/(.*)| ) {
 die "Can't connect to mongodb: $MONGO_URL" unless defined $db;
 
 my $col_source = $db->get_collection('sources');
+my $col_files = $db->get_collection('files');
 
 foreach my $item (@ADD_SRC) {
-    if ($col_source->update({src => $item}, {'$set' => {src => $item}}, {upsert => 1})) {
+    if (
+        $col_source->update(
+            { src    => $item },
+            { '$set' => { src => $item }, '$unset' => { rm => "" } },
+            { upsert => 1 }
+        )
+      )
+    {
         print "added source: $item\n";
-    } 
+    }
+
 }
 
 foreach my $item (@RM_SRC) {
@@ -144,28 +158,47 @@ if ($LIST) {
 if ($SCAN) {
     print "Start scanning sources\n";
 
-    my @a = $col_source->find({rm => {'$ne' => boolean::true}})->all();
+    my @a = $col_source->find( { rm => { '$ne' => boolean::true } } )->all();
 
-    my $ua = Mojo::UserAgent->new (max_redirects => 5);
-    $ua->transactor->name ('Mozilla/5.0');
+    # fetch all files from mongodb, and  convert to hash, where key is
+    # "name" field of record
+    my %stored_files;
+    
+    foreach my $f ( $col_files->find( { rm => { '$ne' => boolean::true } } )
+        ->fields( { name => 1, sources => 1 } )->all() )
+    {
+        $stored_files{ $f->{name} } = $f;
+    }
 
-    my @files;
+    # Hash of filenames->sources that alive.
+    # At end, we remove dead sources from db, and put to "oldsources" field of collection
+    my %confirm_sources;
+
+    my $ua = Mojo::UserAgent->new( max_redirects => 5 );
+    $ua->transactor->name('Mozilla/5.0');
+
+    my %files;
 
     foreach my $src (@a) {
         my $source = $src->{src};
+        my $sourceId = $src->{_id}->value;
+
         print "=> $source\n";
 
         # google drive
-        if ($source =~m|^http[s]://docs.google.com/folderview|) {
+        if ( $source =~ m|^http[s]://docs.google.com/folderview| ) {
 
-        } elsif ($source =~m/http:/) {
-            my $tx = $ua->get ($source);
+        }
+        elsif ( $source =~ m/http:/ ) {
+            my $tx = $ua->get($source);
             my $page;
 
             # get page
-            if (my $res = $tx->success) {
+            if ( my $res = $tx->success ) {
                 $page = $res->body;
-            } else {
+                utf8::decode($page);
+            }
+            else {
                 my $err = $tx->error;
                 die "$err->{code} response: $err->{message}" if $err->{code};
                 die "Connection error: $err->{message}";
@@ -174,15 +207,78 @@ if ($SCAN) {
             my @result;
 
             # apache index?
-            if ($page =~m|<tr><td valign="top"><img.*?</td><td>&nbsp;</td></tr>|) {
+            if ( $page =~
+                m|<tr><td valign="top"><img.*?</td><td>&nbsp;</td></tr>| )
+            {
                 @result = AnonFM::Util::parseApacheIndex($page);
             }
+
             # anonfm?
-            elsif ($page =~ m|onclick=['"]showPlayer\(this\);return false['"]>|) {
+            elsif (
+                $page =~ m|onclick=['"]showPlayer\(this\);return false['"]>| )
+            {
                 @result = AnonFM::Util::parseAnonFMrecords($page);
-            } else {
+            }
+            else {
                 print "!! Unknown source type, skip.\n";
             }
+
+            my $now = time();
+            foreach (@result) {
+                my $filename = $_->{filename};
+                my $size     = $_->{size};
+
+                # if sourceId allredy exist in record, skip
+                if ( exists $stored_files{$filename}
+                    && $sourceId ~~ $stored_files{$filename}{'sources'} )
+                {
+                    # mark this source as seen and next
+                    $confirm_sources{ $filename }{$sourceId} = 1;
+                    next;
+                }
+                my $modifier = { '$addToSet' => { sources => $sourceId } };
+
+                # if not event exist record, add to modifier $set name and size
+                if ( !exists $stored_files{ $_->{filename} } ) {
+                    $modifier->{'$set'} = { name => $filename,
+                                            addedAt => $now,
+                                            size => $size };
+                    print "  New file: $filename\n";
+                } else {
+                    print "  Update source for: $filename\n";
+                }
+
+                # update collection
+                $col_files->update({name => $filename}, $modifier, {upsert => 1});
+
+                # mark this source as seen
+                $confirm_sources { $filename }{$sourceId} = 1;
+            }
+
+        }
+    }
+    # check sources. and remove deadlinks
+
+    foreach my $filename ( keys %stored_files ) {
+
+        my @deadSource;
+        foreach my $source ( @{ $stored_files{$filename}{'sources'} } ) {
+            if ( exists $confirm_sources{$filename}{$source} ) {
+                next;
+            }
+            push @deadSource, $source;
+        }
+
+        if (@deadSource) {
+            $col_files->update(
+                {
+                    _id => $stored_files{$filename}{_id}
+                },
+                {
+                    '$pullAll'  => { sources => \@deadSource },
+                    '$addToSet' => { oldsource => { '$each' => \@deadSource } }
+                }
+            );
         }
     }
 }
