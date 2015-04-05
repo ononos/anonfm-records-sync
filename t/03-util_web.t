@@ -1,7 +1,7 @@
 #!/usr/bin/perl -Iblib/lib -Iblib/arch -I../blib/lib -I../blib/arch
 #
 use utf8;
-use Test::More tests => 3;
+use Test::More tests => 4;
 BEGIN { use_ok( AnonFM::Util ); }
 
 use POSIX 'strftime';
@@ -31,7 +31,17 @@ subtest "Record page t/fixture/records.html" => sub {
 
     my @files = AnonFM::Util::parseAnonFMrecords($record_src);
 
-    is (@files, 422, 'Number of records in fixture page');
+    is( @files,          422,           'Number of records in fixture page' );
     is( $files[0]{size}, 62_161 * 1024, 'Size of first record' );
     is( $files[0]{filename}, 'anonfm-20150404-190302-Администрация.aac', 'Filename of first record' );
+};
+
+subtest "Apache index page t/fixture/apach_index.html" => sub {
+    my $apache_src = path("t/fixture/apach_index.html")->slurp_utf8();
+
+    my @files = AnonFM::Util::parseApacheIndex($apache_src);
+
+    is( @files, 28, 'Number of files in apache index page');
+    is( $files[0]{filename}, '2010-12-31-Yiiii-NewYear.mp3', 'File name of first record');
+    is( $files[0]{size}, 151 * 1024 * 1024, "Size of firstrecord (151M)");
 };

@@ -137,7 +137,8 @@ m!<span class="timestamp">\[(.*?)\]</span>  —  <span class="dj">(.*?)</span>: 
 
 =head2 parseAnonFMrecords($htmlsource)
 
-Return files from anon.fm record page
+Parse anon.fm record page (primary http://anon.fm/records/index.html).
+Return array of {filename => '..', size => '..'}
 
 =cut
 
@@ -163,6 +164,41 @@ sub parseAnonFMrecords {
             }
             push (@res, {filename => $filename, size => $size});
         }
+    }
+    return @res;
+}
+
+=head2 parseApacheIndex($htmlpage)
+
+Parse apache index page and return filenames and size
+
+Return array of {filename => '..', size => '..'}
+
+=cut
+
+sub parseApacheIndex {
+    my $source = shift;
+    my @res;
+
+    if ($source =~m|<tr><td valign="top"><img.*?</td><td>&nbsp;</td></tr>|) {
+        while ($source =~ m|<td><a href=".*?">([^/].*?)</a></td><td align="right">.*?</td><td align="right">(.*?)</td>|g) {
+            my ($filename, $size) = ($1, $2);
+
+             # parse size
+            if ( $size =~ /(\d+)K/ ) {
+                $size = $1 * 1024;
+            }
+            elsif ( $size =~ /(\d+)M/ ) {
+                $size = $1 * 1024 * 1024;
+            }
+            elsif ( $size =~ /(\d+)G/ ) {
+                $size = $1 * 1024 * 1024 * 1024;
+            }
+            else {
+                $size = int($size);
+            }
+            push( @res, { filename => $filename, size => $size } );
+       }
     }
     return @res;
 }
