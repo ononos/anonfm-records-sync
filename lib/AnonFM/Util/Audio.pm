@@ -185,7 +185,7 @@ sub sox {
           . ' | ffmpeg -y -i - '
           . ($options->{ffmpeg_cmd} // FFMPEG_CMD) . ' '
           . shell_quote($tmpname);
-        print "Run piped: $cmd\n";
+        print " Run piped: $cmd\n";
         my $ok = run( command => $cmd );
         if ($ok) {
             rename( $tmpname, $outfile);
@@ -202,7 +202,7 @@ sub sox {
           . ($options->{ffmpeg_cmd} // FFMPEG_CMD) . ' '
           . shell_quote($tmpname);
 
-        print "Run: $cmd\n";
+        print " Run: $cmd\n";
         my ( $ok, $err, $full_buf, $stdout_buf, $stderr_buf ) =
           run( command => $cmd );
 

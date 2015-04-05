@@ -2,6 +2,7 @@ mongodb: mongodb://localhost:27017/anonfm
 
 cache:
   - /home/anon/tmp/cache1/
+  - /home/anon/tmp/cache2/
 
 #
 # Preview generator
@@ -12,3 +13,8 @@ keep_downloaded: 1
 
 # Location where to download files
 download_dir: /home/anon/tmp/download/
+
+preview_dir: /home/anon/tmp/preview/
+
+ffmpeg_cmd: -acodec libfdk_aac -profile:a aac_he -ab 12k -ac 2 -ar 22050
+ffmpeg: /usr/local/bin/ffmpeg

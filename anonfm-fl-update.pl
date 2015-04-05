@@ -65,19 +65,21 @@ Scan sources for files, update db.
 
 use warnings;
 use strict;
+use feature "state";
 
 use Getopt::Long;
 use Pod::Usage;
 use MongoDB;
 use boolean;
 use Config::Any::YAML;
-
+use Path::Tiny;
 use FindBin;
 use lib "$FindBin::Bin/lib";
-
 use Mojo::UserAgent;
 
+
 use AnonFM::Util;
+use AnonFM::Util::Audio;
 
 use Data::Dumper;
 
@@ -116,7 +118,7 @@ my $config = Config::Any::YAML->load ($CONFIG_FILE);
 
 my $db;
 
-foreach (qw/mongodb cache download_dir/) {
+foreach (qw/mongodb cache download_dir preview_dir/) {
     die "Config file have no \"$_\" key\n" unless exists $config->{$_};
 }
 
@@ -181,7 +183,7 @@ if ($SCAN) {
     # fetch all files from mongodb, and  convert to hash, where key is
     # "name" field of record
     my %stored_files;
-    
+
     foreach my $f ( $col_files->find( { rm => { '$ne' => boolean::true } } )
         ->fields( { name => 1, sources => 1 } )->all() )
     {
@@ -205,7 +207,10 @@ if ($SCAN) {
 
         # google drive
         if ( $source =~ m|^http[s]://docs.google.com/folderview| ) {
-            # TODO: google drive
+            # my $url = Mojo::URL->new ($source);
+            # my $id = $url->query->param ('id');
+
+            # recursiveGoogle()
         }
         elsif ( $source =~ m/http:/ ) {
             my $tx = $ua->get($source);
@@ -246,21 +251,32 @@ if ($SCAN) {
                 my $filename = $_->{filename};
                 my $size     = $_->{size};
 
+                my ( $dj, $timestamp ) = AnonFM::Util::parseFilename($filename);
+
+                unless ( defined $timestamp ) {
+                    print "Ignored $filename\n";
+                    next;
+                }
+
                 # if sourceId allredy exist in record, skip
                 if ( exists $stored_files{$filename}
-                    && $sourceId ~~ $stored_files{$filename}{'sources'} )
+                    && grep { $_->{id} eq $sourceId } @{$stored_files{$filename}{'sources'}} )
                 {
                     # mark this source as seen and next
                     $confirm_sources{ $filename }{$sourceId} = 1;
                     next;
                 }
-                my $modifier = { '$addToSet' => { sources => $sourceId } };
+                my $modifier = { '$addToSet' => { sources => {id => $sourceId} } };
 
                 # if not event exist record, add to modifier $set name and size
                 if ( !exists $stored_files{ $_->{filename} } ) {
-                    $modifier->{'$set'} = { name => $filename,
-                                            addedAt => $now,
-                                            size => $size };
+                    $modifier->{'$set'} = {
+                        name      => $filename,
+                        addedAt   => $now,
+                        dj        => $dj,
+                        timestamp => $timestamp,
+                        size      => $size
+                    };
                     print "  New file: $filename\n";
                 } else {
                     print "  Update source for: $filename\n";
@@ -279,24 +295,135 @@ if ($SCAN) {
     # check sources. and remove deadlinks
     foreach my $filename ( keys %stored_files ) {
 
-        my @deadSource;
         foreach my $source ( @{ $stored_files{$filename}{'sources'} } ) {
-            if ( exists $confirm_sources{$filename}{$source} ) {
+            my $sourceId = $source->{id};
+            if ( exists $confirm_sources{$filename}{$sourceId} ) {
                 next;
             }
-            push @deadSource, $source;
-        }
-
-        if (@deadSource) {
             $col_files->update(
                 {
-                    _id => $stored_files{$filename}{_id}
+                    _id => $stored_files{$filename}{_id},
+                    'sources.id' => $sourceId
                 },
+                {'$set' => {'sources.$.rm' => true}});
+        }
+    }
+} # / SCAN
+
+if ($MAKE_PREV) {
+    print "Start build preview\n";
+
+    path( $config->{preview_dir} )->mkpath;
+    path( $config->{download_dir} )->mkpath;
+
+    my %sourcesById;
+    foreach ( $col_source->find()->all() ) {
+        $sourcesById{ $_->{_id}->value } = $_;
+    }
+
+    my @a = $col_files->find(
+        {
+            '$and' => [
+                { hasPreview => { '$ne' => boolean::true } },
+                { rm         => { '$ne' => boolean::true } }
+            ]
+        }
+    )->fields( { name => 1, sources => 1 } )->all();
+
+    foreach (@a) {
+
+        my $filename = $_->{name};
+        my $file_sources = $_->{sources};
+        my $previewName = $_->{_id};
+        my $fileId = $_->{_id};
+
+
+        # check if file exist in cache
+        my $fullname;
+
+        foreach ( $config->{download_dir}, @{ $config->{cache} } ) {
+            my $f = path( $_, $filename );
+            if ( $f->is_file ) {
+                $fullname = $f;
+                print "Using cached file $f\n";
+                last;
+            }
+        }
+
+         # download if not exist
+        unless ( defined $fullname ) {
+            my $file_download = path( $config->{download_dir}, $filename );
+
+            foreach ( @{$file_sources} ) {
+                next if ($_->{rm} // 0);
+
+                my $id  = $_->{id};
+                my $url = $sourcesById{$id}->{src} . $filename;
+
+                print $url . "\n";
+
+                if ( download( $url, $file_download ) ) {
+                    $fullname = $file_download;
+                    last;
+                }
+            }
+        }
+
+        if ( defined $fullname && $fullname->is_file ) {
+
+            my $info = AnonFM::Util::Audio::file_info($fullname);
+
+            AnonFM::Util::Audio::mk_preview(
+                $fullname,
+                path( $config->{preview_dir}, $previewName . '.flv' ),
                 {
-                    '$pullAll'  => { sources => \@deadSource },
-                    '$addToSet' => { oldsource => { '$each' => \@deadSource } }
+                    ffmpeg     => $config->{ffmpeg},
+                    ffmpeg_cmd => $config->{ffmpeg_cmd}
                 }
             );
+
+            $col_files->update(
+                { _id => $fileId },
+                {
+                    '$set' => {
+                        size     => $info->{size}     // 0,
+                        bitrate  => $info->{bitrate}  // 0,
+                        duration => $info->{duration} // 0,
+                        hasPreview => true
+                    }
+                }
+            );
+
         }
+
+
+    }
+}
+
+sub download {
+    my ( $url, $filename ) = @_;
+
+    state $ua = Mojo::UserAgent->new( max_redirects => 5 );
+    $ua->transactor->name('Mozilla/5.0');
+
+    if ( index( $url, 'google.com' ) >= 0 ) {
+
+        # check id
+        if ( $url =~ m|docs.google.com/file/d/(\w+)| ) {
+            $url = 'https://googledrive.com/host/' . $1;
+        }
+    }
+
+    print "Downloading: $url\n";
+    my $tx = $ua->get($url);
+    if ( $tx->success ) {
+        $tx->res->content->asset->move_to($filename);
+        print "Saved as $filename\n";
+        return 1;
+    }
+    else {
+        my ( $err, $code ) = $tx->error;
+        print $code ? "$code response: $err\n" : "Connection error: $err->message\n";
+        return 0;
     }
 }
