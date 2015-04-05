@@ -6,6 +6,7 @@ use warnings;
 
 use Carp;
 use Time::Local;
+use Mojo::Util qw(url_unescape);
 
 =head1 NAME
 
@@ -131,6 +132,39 @@ m!<span class="timestamp">\[(.*?)\]</span>  —  <span class="dj">(.*?)</span>: 
             die "Time stamp not parsed: $timestr - $dj - $desc\n";
         }
     }
+}
+
+
+=head2 parseAnonFMrecords($htmlsource)
+
+Return files from anon.fm record page
+
+=cut
+
+sub parseAnonFMrecords {
+    my $source = shift;
+
+    my @res;
+
+    if ($source =~ m|onclick=['"]showPlayer\(this\);return false['"]>|) {
+        # looks like anon.fm/records.html
+        while ($source =~ m|<td><a href=['"](.*?)['"] onclick=['"]showPlayer\(this\);return false['"]>.*?</a></td><td>(.*?)</td></tr>|g) {
+            my ($url, $size) = ($1, $2);
+            next unless ($url =~m |^(.*/)?(.*)|);
+            my $filename = $2;
+
+            $filename = url_unescape $filename;
+
+            # parse size
+            if ($size =~/(\d+)kb/i) {
+                $size = $1 * 1024;
+            } else {
+                $size = 0;
+            }
+            push (@res, {filename => $filename, size => $size});
+        }
+    }
+    return @res;
 }
 
 1;
