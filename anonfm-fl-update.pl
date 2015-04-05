@@ -2,11 +2,11 @@
 
 =head1 NAME
 
-pod-usage - Update file list from sources
+anonfm-fl-update.pl - Update file list from sources
 
 =head1 SYNOPSIS
 
-  anonfm-fl-update.pl [options]
+  anonfm-fl-update.pl [options] [ --scan | --mkprev]
 
   Help Options:
    --help     Show this scripts help information.
@@ -26,9 +26,9 @@ Show the brief help information.
 
 Read the manual.
 
-=item B<--mongodb>
+=item B<--config>
 
-Set mongo db url like "mongodb://user:password:@host:port/dbname"
+Local config file, store cache, preview
 
 =item B<--add source>
 
@@ -41,6 +41,14 @@ Remove source.
 =item B<--list>
 
 List sources.
+
+=item B<--scan>
+
+Scan sources for files, update db.
+
+=item B<--mkprev>
+
+Scan sources for files, update db.
 
 =back
 
@@ -62,6 +70,7 @@ use Getopt::Long;
 use Pod::Usage;
 use MongoDB;
 use boolean;
+use Config::Any::YAML;
 
 use FindBin;
 use lib "$FindBin::Bin/lib";
@@ -77,13 +86,16 @@ binmode(STDOUT,':utf8');
 
 my $HELP = 0;
 my $MANUAL = 0;
+
 my $SCAN = 0;
+my $MAKE_PREV = 0;
 
 my $MONGO_URL;
 
 my @ADD_SRC;
 my @RM_SRC;
 my $LIST = 0;
+my $CONFIG_FILE;
 
 GetOptions(
     "help"      => \$HELP,
@@ -92,17 +104,23 @@ GetOptions(
     "add=s"     => \@ADD_SRC,
     "remove=s"  => \@RM_SRC,
     "list"      => \$LIST,
-    "scan"    => \$SCAN,
+    "scan"      => \$SCAN,
+    "mkprev"    => \$MAKE_PREV,
+    "config=s"  => \$CONFIG_FILE,
 );
 
-$MONGO_URL //= $ENV{'MONGO_URL'};
-
-pod2usage(1) if $HELP || !$MONGO_URL;
+pod2usage(1) if $HELP || !$CONFIG_FILE;
 pod2usage(-exitval => 0, -verbose => 2) if $MANUAL;
+
+my $config = Config::Any::YAML->load ($CONFIG_FILE);
 
 my $db;
 
-if ( $MONGO_URL =~ m|mongodb://(.*?):(.*?)@(.*?):(.*?)/(.*)| ) {
+foreach (qw/mongodb cache download_dir/) {
+    die "Config file have no \"$_\" key\n" unless exists $config->{$_};
+}
+
+if ( $config->{mongodb} =~ m|mongodb://(.*?):(.*?)@(.*?):(.*?)/(.*)| ) {
     my $client = MongoDB::MongoClient->new(
         password => $1,
         username => $2,
@@ -110,7 +128,7 @@ if ( $MONGO_URL =~ m|mongodb://(.*?):(.*?)@(.*?):(.*?)/(.*)| ) {
         db_name  => $5,
     );
     $db = $client->get_database($5);
-} elsif ( $MONGO_URL =~ m|mongodb://(.*?):(.*?)/(.*)| ) {
+} elsif ( $config->{mongodb} =~ m|mongodb://(.*?):(.*?)/(.*)| ) {
   my $client = MongoDB::MongoClient->new(
       host    => "$1:$2",
       db_name => $3,
@@ -123,6 +141,7 @@ die "Can't connect to mongodb: $MONGO_URL" unless defined $db;
 my $col_source = $db->get_collection('sources');
 my $col_files = $db->get_collection('files');
 
+# --add
 foreach my $item (@ADD_SRC) {
     if (
         $col_source->update(
@@ -137,24 +156,23 @@ foreach my $item (@ADD_SRC) {
 
 }
 
+# --remove
 foreach my $item (@RM_SRC) {
     if ($col_source->update({src => $item}, {'$set' => {rm => true}})) {
         print "removed source: $item\n";
     }
 }
 
+# --list
 if ($LIST) {
     my @a = $col_source->find()->all();
     my $indent = "     ";
     foreach (@a) {
-
-        print "URL: " . $_->{src} ."\n";
-        if ($_->{rm}) {
-            print $indent. "removed\n";
-        }
+        printf "%-8s %s\n", $_->{rm} ? 'removed' : '', $_->{src},;
     }
 }
 
+# --scan
 if ($SCAN) {
     print "Start scanning sources\n";
 
@@ -187,7 +205,7 @@ if ($SCAN) {
 
         # google drive
         if ( $source =~ m|^http[s]://docs.google.com/folderview| ) {
-
+            # TODO: google drive
         }
         elsif ( $source =~ m/http:/ ) {
             my $tx = $ua->get($source);
@@ -257,8 +275,8 @@ if ($SCAN) {
 
         }
     }
-    # check sources. and remove deadlinks
 
+    # check sources. and remove deadlinks
     foreach my $filename ( keys %stored_files ) {
 
         my @deadSource;
