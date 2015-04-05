@@ -63,6 +63,13 @@ use Pod::Usage;
 use MongoDB;
 use boolean;
 
+use FindBin;
+use lib "$FindBin::Bin/lib";
+
+use Mojo::UserAgent;
+
+use AnonFM::Util;
+
 my $HELP = 0;
 my $MANUAL = 0;
 my $SCAN = 0;
@@ -80,7 +87,7 @@ GetOptions(
     "add=s"     => \@ADD_SRC,
     "remove=s"  => \@RM_SRC,
     "list"      => \$LIST,
-    "scan=s"    => \$SCAN,
+    "scan"    => \$SCAN,
 );
 
 $MONGO_URL //= $ENV{'MONGO_URL'};
@@ -124,9 +131,58 @@ foreach my $item (@RM_SRC) {
 
 if ($LIST) {
     my @a = $col_source->find()->all();
+    my $indent = "     ";
     foreach (@a) {
-        printf("%-30s %-5s\n", $_->{src}, $_->{rm} ? 'yes' : 'no');
+
+        print "URL: " . $_->{src} ."\n";
+        if ($_->{rm}) {
+            print $indent. "removed\n";
+        }
     }
 }
 
+if ($SCAN) {
+    print "Start scanning sources\n";
 
+    my @a = $col_source->find({rm => {'$ne' => boolean::true}})->all();
+
+    my $ua = Mojo::UserAgent->new (max_redirects => 5);
+    $ua->transactor->name ('Mozilla/5.0');
+
+    my @files;
+
+    foreach my $src (@a) {
+        my $source = $src->{src};
+        print "=> $source\n";
+
+        # google drive
+        if ($source =~m|^http[s]://docs.google.com/folderview|) {
+
+        } elsif ($source =~m/http:/) {
+            my $tx = $ua->get ($source);
+            my $page;
+
+            # get page
+            if (my $res = $tx->success) {
+                $page = $res->body;
+            } else {
+                my $err = $tx->error;
+                die "$err->{code} response: $err->{message}" if $err->{code};
+                die "Connection error: $err->{message}";
+            }
+
+            my @result;
+
+            # apache index?
+            if ($page =~m|<tr><td valign="top"><img.*?</td><td>&nbsp;</td></tr>|) {
+                @result = AnonFM::Util::parseApacheIndex($page);
+            }
+            # anonfm?
+            elsif ($page =~ m|onclick=['"]showPlayer\(this\);return false['"]>|) {
+                @result = AnonFM::Util::parseAnonFMrecords($page);
+            } else {
+                print "!! Unknown source type, skip.\n";
+            }
+        }
+    }
+}
