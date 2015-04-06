@@ -329,6 +329,18 @@ if ($SCAN) {
         my $source = $src->{url};
         my $sourceId = $src->{_id}->value;
 
+        sub update_source_msg {    # helper
+            my $msg = shift;
+            $col_source->update(
+                {
+                    _id => MongoDB::OID->new( "value" => $sourceId )
+                },
+                {
+                    '$set' => { msg => $msg }
+                }
+            );
+        }
+
         # decide, does we need continue or skip
         my $lastUpdated = $src->{lastUpdated};
         if ( !$FORCE && defined $lastUpdated ) {
@@ -348,17 +360,22 @@ if ($SCAN) {
 
         # google drive id?
         if ($source =~ m|\w{28}|) {
-            @result = recursiveGoogle($source);
-        }
-        # google ddrive url?
-        elsif ( $source =~ m|^http[s]://docs.google.com/folderview| ) {
-            my $url = Mojo::URL->new ($source);
-            my $id = $url->query->param ('id');
-
-            @result = recursiveGoogle($id);
+            eval { @result = recursiveGoogle($source); };
+            if ($@) {
+                print Dumper $src;
+                update_source_msg $@;
+                push @skipped_sources, $sourceId;
+                next;
+            }
         }
         elsif ( $source =~ m/http:/ ) {
             my $page = fetch_page($source);
+
+            unless (defined $page) {
+                update_source_msg 'Failure download page';
+                push @skipped_sources, $sourceId;
+                next;
+            }
 
             # apache index?
             if ( $page =~
@@ -383,7 +400,10 @@ if ($SCAN) {
             print "!! Unknown source type, skip.\n";
         } # /if
 
+        update_source_msg 'ok';
+
         my $now = DateTime->now();
+
         foreach (@result) {
             my $filename = $_->{filename};
             my $size     = $_->{size};
@@ -436,16 +456,32 @@ if ($SCAN) {
 
     }
 
-    # check sources. and remove deadlinks
+    # check sources. and remove deadlinks by adding "rm" field
     foreach my $filename ( keys %stored_files ) {
 
         foreach my $source ( @{ $stored_files{$filename}{'sources'} } ) {
             my $sourceId = $source->{id};
-            if ( exists $confirm_sources{$filename}{$sourceId}
-                || $sourceId ~~ @skipped_sources )
-            {
+
+            next if ( $sourceId ~~ @skipped_sources );
+
+            if ( exists $confirm_sources{$filename}{$sourceId} ) {
+                if ( $source->{rm} // 0 ) {
+                    # looks this file now present in source, remove "rm" field
+                    $col_files->update(
+                        {
+                            _id          => $stored_files{$filename}{_id},
+                            'sources.id' => $sourceId
+                        },
+                        {
+                            '$unset' => { 'sources.$.rm' => "" }
+                        }
+                    );
+                }
                 next;
             }
+
+            next if ( $source->{rm} // 0 );
+
             $col_files->update(
                 {
                     _id          => $stored_files{$filename}{_id},
