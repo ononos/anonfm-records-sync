@@ -207,10 +207,10 @@ if ($SCAN) {
 
         # google drive
         if ( $source =~ m|^http[s]://docs.google.com/folderview| ) {
-            # my $url = Mojo::URL->new ($source);
-            # my $id = $url->query->param ('id');
+            my $url = Mojo::URL->new ($source);
+            my $id = $url->query->param ('id');
 
-            # recursiveGoogle()
+            recursiveGoogle($result, $sourceTitle, $id);
         }
         elsif ( $source =~ m/http:/ ) {
             my $tx = $ua->get($source);
@@ -426,4 +426,55 @@ sub download {
         print $code ? "$code response: $err\n" : "Connection error: $err->message\n";
         return 0;
     }
+}
+
+
+sub recursiveGoogle {
+    my ($result, $sourceTitle, $id, $tid) = @_;
+
+    my $html;
+
+    my $url;
+    if (defined $tid) {
+        $url = "https://docs.google.com/folderview?id=$id&tid=$tid";
+    } else {
+        $url = "https://docs.google.com/folderview?id=$id";
+        $tid = $id;
+    }
+
+    for my $retry (1..5) {
+        my $tx = $ua->get ($url);
+        if (my $res = $tx->success) {
+            $html = $res->body;
+            utf8::decode($html);
+            last;
+        }
+        print "Failed get google drive page, retry again \#$retry\n";
+        sleep 1;
+    }
+
+    die "Couldn't get google drive page id=$id tid=$tid" unless (defined $html);
+
+    my $files = 0;
+    while ($html =~m |<div class="flip-entry" id="entry-(.*?)" tabindex="0" role="link">.*?<div class="flip-entry-list-icon">(.*?)<div class="flip-entry-title">(.*?)</div>|g) {
+        my ($newID, $typeStr, $filename) = ($1, $2, $3);
+
+        # does it folder
+        if (index ($typeStr, 'drive-sprite-folder-list-shared-icon') >=0) {
+            print "Entering folder \"$filename\" $newID\n";
+            #googleDisk ($result, $sourceTitle, $newID, $tid);
+            print "Leaving folder \"$filename\" $newID\n";
+        } else {
+            my ($dj, $timestamp) = parseFilename ($filename);
+            unless (defined $timestamp) {
+                print "Ignored file (check sub parseFilename): $filename\n";
+                next;
+            }
+            $files++;
+
+            addTrack ($result, $dj, $timestamp, $filename, "https://docs.google.com/file/d/$newID", 0, $sourceTitle);
+            print "add $filename\n";
+        }
+    }
+    print "Files: $files\n";
 }
