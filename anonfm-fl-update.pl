@@ -271,8 +271,8 @@ if ($SCAN) {
     # "name" field of record
     my %stored_files;
 
-    foreach my $f ( $col_files->find( { rm => { '$ne' => boolean::true } } )
-        ->fields( { name => 1, sources => 1 } )->all() )
+    foreach
+      my $f ( $col_files->find()->fields( { name => 1, sources => 1 } )->all() )
     {
         $stored_files{ $f->{name} } = $f;
     }
