@@ -86,6 +86,11 @@ use Data::Dumper;
 # prevent Wide character warning
 binmode(STDOUT,':utf8');
 
+# Increase limit to 0.72GB
+$ENV{MOJO_MAX_MESSAGE_SIZE} = 746586112;
+
+# ------------------------------------------------------
+# commandline options
 my $HELP = 0;
 my $MANUAL = 0;
 
@@ -110,6 +115,7 @@ GetOptions(
     "mkprev"    => \$MAKE_PREV,
     "config=s"  => \$CONFIG_FILE,
 );
+# ------------------------------------------------------
 
 pod2usage(1) if $HELP || !$CONFIG_FILE;
 pod2usage(-exitval => 0, -verbose => 2) if $MANUAL;
@@ -147,21 +153,25 @@ my $col_files = $db->get_collection('files');
 foreach my $item (@ADD_SRC) {
     if (
         $col_source->update(
-            { src    => $item },
-            { '$set' => { src => $item }, '$unset' => { rm => "" } },
+            { url    => $item },
+            { '$set' => { url => $item }, '$unset' => { rm => "" } },
             { upsert => 1 }
-        )
+        )->{n}
       )
     {
         print "added source: $item\n";
+        $LIST = 1;
     }
 
 }
 
 # --remove
 foreach my $item (@RM_SRC) {
-    if ($col_source->update({src => $item}, {'$set' => {rm => true}})) {
+    if ($col_source->update({url => $item}, {'$set' => {rm => true}})->{n}) {
         print "removed source: $item\n";
+        $LIST = 1;
+    } else {
+        print "Source not found $item\n";
     }
 }
 
@@ -170,7 +180,7 @@ if ($LIST) {
     my @a = $col_source->find()->all();
     my $indent = "     ";
     foreach (@a) {
-        printf "%-8s %s\n", $_->{rm} ? 'removed' : '', $_->{src},;
+        printf "%-8s %s\n", $_->{rm} ? 'removed' : '', $_->{url},;
     }
 }
 
@@ -194,40 +204,29 @@ if ($SCAN) {
     # At end, we remove dead sources from db, and put to "oldsources" field of collection
     my %confirm_sources;
 
-    my $ua = Mojo::UserAgent->new( max_redirects => 5 );
-    $ua->transactor->name('Mozilla/5.0');
-
     my %files;
 
     foreach my $src (@a) {
-        my $source = $src->{src};
+        my $source = $src->{url};
         my $sourceId = $src->{_id}->value;
 
         print "=> $source\n";
 
-        # google drive
-        if ( $source =~ m|^http[s]://docs.google.com/folderview| ) {
+        my @result;
+
+        # google drive id?
+        if ($source =~ m|\w{28}|) {
+            @result = recursiveGoogle($source);
+        }
+        # google ddrive url?
+        elsif ( $source =~ m|^http[s]://docs.google.com/folderview| ) {
             my $url = Mojo::URL->new ($source);
             my $id = $url->query->param ('id');
 
-            recursiveGoogle($result, $sourceTitle, $id);
+            @result = recursiveGoogle($id);
         }
         elsif ( $source =~ m/http:/ ) {
-            my $tx = $ua->get($source);
-            my $page;
-
-            # get page
-            if ( my $res = $tx->success ) {
-                $page = $res->body;
-                utf8::decode($page);
-            }
-            else {
-                my $err = $tx->error;
-                die "$err->{code} response: $err->{message}" if $err->{code};
-                die "Connection error: $err->{message}";
-            }
-
-            my @result;
+            my $page = fetch_page($source);
 
             # apache index?
             if ( $page =~
@@ -242,54 +241,62 @@ if ($SCAN) {
             {
                 @result = AnonFM::Util::parseAnonFMrecords($page);
             }
-            else {
-                print "!! Unknown source type, skip.\n";
-            }
-
-            my $now = time();
-            foreach (@result) {
-                my $filename = $_->{filename};
-                my $size     = $_->{size};
-
-                my ( $dj, $timestamp ) = AnonFM::Util::parseFilename($filename);
-
-                unless ( defined $timestamp ) {
-                    print "Ignored $filename\n";
-                    next;
-                }
-
-                # if sourceId allredy exist in record, skip
-                if ( exists $stored_files{$filename}
-                    && grep { $_->{id} eq $sourceId } @{$stored_files{$filename}{'sources'}} )
-                {
-                    # mark this source as seen and next
-                    $confirm_sources{ $filename }{$sourceId} = 1;
-                    next;
-                }
-                my $modifier = { '$addToSet' => { sources => {id => $sourceId} } };
-
-                # if not event exist record, add to modifier $set name and size
-                if ( !exists $stored_files{ $_->{filename} } ) {
-                    $modifier->{'$set'} = {
-                        name      => $filename,
-                        addedAt   => $now,
-                        dj        => $dj,
-                        timestamp => $timestamp,
-                        size      => $size
-                    };
-                    print "  New file: $filename\n";
-                } else {
-                    print "  Update source for: $filename\n";
-                }
-
-                # update collection
-                $col_files->update({name => $filename}, $modifier, {upsert => 1});
-
-                # mark this source as seen
-                $confirm_sources { $filename }{$sourceId} = 1;
-            }
-
         }
+        else {
+            print "!! Unknown source type, skip.\n";
+        } # /if
+
+        my $now = time();
+        foreach (@result) {
+            my $filename = $_->{filename};
+            my $size     = $_->{size};
+            my $url      = $_->{url};
+
+            my ( $dj, $timestamp ) = AnonFM::Util::parseFilename($filename);
+
+            unless ( defined $timestamp ) {
+                print "Ignored $filename\n";
+                next;
+            }
+
+            # if sourceId allredy exist in record, skip
+            if ( exists $stored_files{$filename}
+                     && grep { $_->{id} eq $sourceId } @{$stored_files{$filename}{'sources'}} ) {
+                # mark this source as seen and next
+                $confirm_sources{ $filename }{$sourceId} = 1;
+                next;
+            }
+
+            my $sourceObj = {id => $sourceId};
+            if (defined $url) {
+                $sourceObj->{url} = $url;
+            }
+
+            # modifier for mongo
+            my $modifier = { '$addToSet' => { sources => $sourceObj } };
+
+
+            # if not event exist record, add to modifier $set name and size
+            if ( !exists $stored_files{ $_->{filename} } ) {
+                $modifier->{'$set'} = {
+                    name      => $filename,
+                    addedAt   => $now,
+                    dj        => $dj,
+                    timestamp => $timestamp,
+                    size      => $size
+                };
+                print "  New file: $filename\n";
+            } else {
+                print "  Update source for: $filename\n";
+            }
+
+            # update collection
+            $col_files->update({name => $filename}, $modifier, {upsert => 1});
+
+            # mark this source as seen
+            $confirm_sources { $filename }{$sourceId} = 1;
+        }
+
     }
 
     # check sources. and remove deadlinks
@@ -358,7 +365,7 @@ if ($MAKE_PREV) {
                 next if ($_->{rm} // 0);
 
                 my $id  = $_->{id};
-                my $url = $sourcesById{$id}->{src} . $filename;
+                my $url = $_->{url} // $sourcesById{$id}->{url} . $filename;
 
                 print $url . "\n";
 
@@ -398,8 +405,32 @@ if ($MAKE_PREV) {
 
 
     }
+} # / MAKE PREVIEW
+
+##########################
+# helpers
+##########################
+
+sub fetch_page {
+    my $url = shift;
+    state $ua = Mojo::UserAgent->new( max_redirects => 5 );
+    $ua->transactor->name('Mozilla/5.0');
+
+    my $tx = $ua->get($url);
+    my $page;
+    # get page
+    if ( my $res = $tx->success ) {
+        $page = $res->body;
+        utf8::decode($page);
+    } else {
+        my ( $err, $code ) = $tx->error;
+        print "Error download $url\n";
+        print Dumper \$err;
+    }
+    return $page;
 }
 
+# download url and save
 sub download {
     my ( $url, $filename ) = @_;
 
@@ -423,18 +454,21 @@ sub download {
     }
     else {
         my ( $err, $code ) = $tx->error;
-        print $code ? "$code response: $err\n" : "Connection error: $err->message\n";
+        print "Error download\n";
+        print Dumper \$err;
         return 0;
     }
 }
 
-
+# recursive traverse google drive pages, get array [{filename => .., url => ..}, ..]
 sub recursiveGoogle {
-    my ($result, $sourceTitle, $id, $tid) = @_;
+    my ($id, $tid) = @_;
 
     my $html;
 
     my $url;
+    my @result;
+
     if (defined $tid) {
         $url = "https://docs.google.com/folderview?id=$id&tid=$tid";
     } else {
@@ -443,38 +477,30 @@ sub recursiveGoogle {
     }
 
     for my $retry (1..5) {
-        my $tx = $ua->get ($url);
-        if (my $res = $tx->success) {
-            $html = $res->body;
-            utf8::decode($html);
-            last;
-        }
-        print "Failed get google drive page, retry again \#$retry\n";
+        $html = fetch_page $url;
+        last if defined $html;
         sleep 1;
     }
 
     die "Couldn't get google drive page id=$id tid=$tid" unless (defined $html);
 
-    my $files = 0;
-    while ($html =~m |<div class="flip-entry" id="entry-(.*?)" tabindex="0" role="link">.*?<div class="flip-entry-list-icon">(.*?)<div class="flip-entry-title">(.*?)</div>|g) {
-        my ($newID, $typeStr, $filename) = ($1, $2, $3);
+    my $data = AnonFM::Util::parseGoogleDrivePage($html);
 
-        # does it folder
-        if (index ($typeStr, 'drive-sprite-folder-list-shared-icon') >=0) {
-            print "Entering folder \"$filename\" $newID\n";
-            #googleDisk ($result, $sourceTitle, $newID, $tid);
-            print "Leaving folder \"$filename\" $newID\n";
-        } else {
-            my ($dj, $timestamp) = parseFilename ($filename);
-            unless (defined $timestamp) {
-                print "Ignored file (check sub parseFilename): $filename\n";
-                next;
-            }
-            $files++;
-
-            addTrack ($result, $dj, $timestamp, $filename, "https://docs.google.com/file/d/$newID", 0, $sourceTitle);
-            print "add $filename\n";
-        }
+    foreach (@{$data->{folders}}) {
+        print "==> Entering " . $_->{filename} . "\n";
+        push @result, recursiveGoogle($_->{id}, $tid);
+        print "==> Leaved " . $_->{filename} . "\n";
     }
-    print "Files: $files\n";
+
+    foreach (@{$data->{files}}) {
+        push @result,
+          {
+            filename => $_->{filename},
+            url      => "https://googledrive.com/host/" . $_->{id}
+          };
+    }
+
+    print "    Files " . scalar(@{$data->{files}}) . "\n";
+
+    return @result;
 }
