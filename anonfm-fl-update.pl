@@ -30,9 +30,9 @@ Read the manual.
 
 Local config file, store cache, preview
 
-=item B<--add source>
+=item B<--add source,duration>
 
-Add source url, google drive id.
+Add source url, google drive id and B<duration> for next update.
 
 =item B<--rm source>
 
@@ -45,6 +45,7 @@ List sources.
 =item B<--scan>
 
 Scan sources for files, update db.
+You can use B<--force> flag for forcing update even no source duration time excited.
 
 =item B<--schedule>
 
@@ -196,6 +197,7 @@ my $SCAN = 0;
 my $SCHEDULE = 0;
 my $MAKE_PREV = 0;
 
+my $FORCE = 0;
 my $MONGO_URL;
 
 my @ADD_SRC;
@@ -211,6 +213,7 @@ GetOptions(
     "remove=s"  => \@RM_SRC,
     "list"      => \$LIST,
     "scan"      => \$SCAN,
+    "force"     => \$FORCE,
     "schedule"  => \$SCHEDULE,
     "mkprev"    => \$MAKE_PREV,
     "config=s"  => \$CONFIG_FILE,
@@ -253,16 +256,25 @@ my $col_files = $db->get_collection('files');
 my $col_schedules = $db->get_collection('schedules');
 
 # --add
-foreach my $item (@ADD_SRC) {
+foreach (@ADD_SRC) {
+    my $url            = $_;
+    my $updateDuration = 259200;
+    if (m/(.*?),(.*)/) {
+        $url            = $1;
+        $updateDuration = $2;
+    }
     if (
         $col_source->update(
-            { url    => $item },
-            { '$set' => { url => $item }, '$unset' => { rm => "" } },
+            { url => $url },
+            {
+                '$set'   => { url => $url, update => $updateDuration },
+                '$unset' => { rm  => "" }
+            },
             { upsert => 1 }
         )->{n}
       )
     {
-        print "added source: $item\n";
+        print "added source: $url\n";
         $LIST = 1;
     }
 
@@ -283,7 +295,7 @@ if ($LIST) {
     my @a = $col_source->find()->all();
     my $indent = "     ";
     foreach (@a) {
-        printf "%-8s %s\n", $_->{rm} ? 'removed' : '', $_->{url},;
+        printf "%-8s %-10s %s\n", $_->{rm} ? 'removed' : '', $_->{update}, $_->{url},;
     }
 }
 
@@ -296,6 +308,10 @@ if ($SCAN) {
     # fetch all files from mongodb, and  convert to hash, where key is
     # "name" field of record
     my %stored_files;
+
+    # sources that was skipped;
+    my @skipped_sources;
+    
 
     foreach
       my $f ( $col_files->find()->fields( { name => 1, sources => 1 } )->all() )
@@ -312,6 +328,19 @@ if ($SCAN) {
     foreach my $src (@a) {
         my $source = $src->{url};
         my $sourceId = $src->{_id}->value;
+
+        # decide, does we need continue or skip
+        my $lastUpdated = $src->{lastUpdated};
+        if ( !$FORCE && defined $lastUpdated ) {
+            my $update = $src->{update};
+            unless ( time() > $update + $lastUpdated->epoch() ) {
+                push @skipped_sources, $sourceId;
+                print "Skip source $source\n";
+                next;
+            }
+        }
+        $col_source->update( { _id => $src->{_id} },
+            { '$set' => { lastUpdated => DateTime->now() } } );
 
         print "=> $source\n";
 
@@ -412,15 +441,18 @@ if ($SCAN) {
 
         foreach my $source ( @{ $stored_files{$filename}{'sources'} } ) {
             my $sourceId = $source->{id};
-            if ( exists $confirm_sources{$filename}{$sourceId} ) {
+            if ( exists $confirm_sources{$filename}{$sourceId}
+                || $sourceId ~~ @skipped_sources )
+            {
                 next;
             }
             $col_files->update(
                 {
-                    _id => $stored_files{$filename}{_id},
+                    _id          => $stored_files{$filename}{_id},
                     'sources.id' => $sourceId
                 },
-                {'$set' => {'sources.$.rm' => true}});
+                { '$set' => { 'sources.$.rm' => true } }
+            );
         }
     }
 } # / SCAN
