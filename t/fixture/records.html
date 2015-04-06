@@ -1,0 +1,574 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="/photon.css">
+<link rel="stylesheet" type="text/css" href="/info.css">
+<style>
+table,td,th{border-collapse:collapse;border: 1px solid #eee;font-family:sans-serif;font-size:12px;}
+td{white-space:nowrap;}
+div{margin:20px 100px;border:1px solid #ccc;border-radius:10px;background:white;padding:10px}
+tr:nth-child(even) {background:#f5f5f5;}
+</style>
+</head><body>
+
+<h1>Записи эфиров</h1>
+
+Архивы старых записей доступны на:<ul>
+<li><a href="http://archive.anon.fm">http://archive.anon.fm</a>
+<li><a href="https://docs.google.com/folder/d/0B6HMhe4i6iXGNWFpQXlIckNGeE0/edit">https://docs.google.com/folder/d/0B6HMhe4i6iXGNWFpQXlIckNGeE0/edit</a>
+</ul>
+Если эфиры где-то внезапно обрываются, т.е. файлы битые - попробуйте найти этот эфир на другом зеркале.
+<script>
+function encodeCyrillic(str) {
+    var res="";
+    for (var q=0; q<str.length; q++) {
+	var ch=str.charCodeAt(q);
+	if (ch<128) {
+	    res+=str.charAt(q);
+	} else {
+	    res+=encodeURIComponent(encodeURIComponent(str.charAt(q)));
+	}
+    }
+    return (res);
+}
+
+var playID=0;
+function showPlayer(l){
+var url=l.href;
+if(url.indexOf(".mp3")>0 || url.indexOf(".aac")>0){
+l.parentNode.innerHTML='<a href="'+url+'">'+l.innerHTML+' (-)</a><br><object type="application/x-shockwave-flash" data="play'+(url.indexOf(".aac")>0?"c":"er")+'.swf" id="audioplayer'+playID+'" height="50" width="100%"><param name="movie" value="play'+(url.indexOf(".aac")>0?"c":"er")+'.swf"><param name="FlashVars" value="autostart=yes&loop=no&playerID=audioplayer'+playID+'&soundFile='+encodeCyrillic(url)+'"><param name="quality" value="high"></object>'
+playID++;
+} else {
+alert('Эту запись нельзя слушать с сайта, так как флеш не умеет данного формата. Скачайте и все прослушайте локально.');
+}
+return false;
+}
+</script>
+
+
+<div><h1>Архивы эфиров</h1>
+<h1 style=font-size:15px><a href="anonfm-part6.torrent">http://anon.fm/records/anonfm-part6.torrent</a></h1>
+<h1 style=font-size:15px><a href="anonfm-part5.torrent">http://anon.fm/records/anonfm-part5.torrent</a></h1>
+<h1 style=font-size:15px><a href="anonfm-part4.torrent">http://anon.fm/records/anonfm-part4.torrent</a></h1>
+<h1 style=font-size:15px><a href="anonfm-part3.torrent">http://anon.fm/records/anonfm-part3.torrent</a></h1>
+<h1 style=font-size:15px><a href="anonfm-part2.torrent">http://anon.fm/records/anonfm-part2.torrent</a></h1>
+<h1 style=font-size:15px><a href="anonfm.torrent">http://anon.fm/records/anonfm[part1].torrent</a></h1>
+</div>
+
+<div>
+<h1>Архивы реквестов</h1>
+<h1 style=font-size:15px><a href="tubes.torrent">Реквесты с ютуба</a></h1>
+<h1 style=font-size:15px><a href="rghost1.torrent">Реквесты с ргхоста</a></h1>
+</div>
+
+<div><h1>Полные записи эфиров</h1>
+Все вылазки диджеев записываются и хранятся 1 неделю (гарантированно), после чего могут быть удолены нахуй. Потом не говорите, что все проебали.<br>
+<font color="lime">Качество оригинальное и без пережатия</font><br>
+Позязя, не забывайте СХОРОНЯТ.
+
+
+<table><tr>
+<th>Год</th>
+<th>Месяц</th>
+<th>День</th>
+<th>Время</th>
+<th>Имя диджея</th>
+<th>Размер</th>
+</tr>
+
+<tr><td>2015</td><td>04</td><td>04</td><td>19:03:02</td><td><a href='anonfm-20150404-190302-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>62161kb</td></tr>
+<tr><td>2015</td><td>04</td><td>03</td><td>21:11:24</td><td><a href='anonfm-20150403-211124-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>2171kb</td></tr>
+<tr><td>2015</td><td>04</td><td>03</td><td>01:52:50</td><td><a href='anonfm-20150403-015250-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>10kb</td></tr>
+<tr><td>2015</td><td>04</td><td>03</td><td>00:02:07</td><td><a href='anonfm-20150403-000207-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>32617kb</td></tr>
+<tr><td>2015</td><td>04</td><td>01</td><td>16:51:54</td><td><a href='anonfm-20150401-165154-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>82885kb</td></tr>
+<tr><td>2015</td><td>04</td><td>01</td><td>16:30:48</td><td><a href='anonfm-20150401-163048-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>3849kb</td></tr>
+<tr><td>2015</td><td>04</td><td>01</td><td>13:13:53</td><td><a href='anonfm-20150401-131353-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>6987kb</td></tr>
+<tr><td>2015</td><td>03</td><td>31</td><td>15:15:09</td><td><a href='anonfm-20150331-151509-Le Comte de Saint-Germain.mp3' onclick='showPlayer(this);return false'>Le Comte de Saint-Germain</a></td><td>37099kb</td></tr>
+<tr><td>2015</td><td>03</td><td>30</td><td>08:57:40</td><td><a href='anonfm-20150330-085740-Le Comte de Saint-Germain.mp3' onclick='showPlayer(this);return false'>Le Comte de Saint-Germain</a></td><td>63666kb</td></tr>
+<tr><td>2015</td><td>03</td><td>29</td><td>22:10:50</td><td><a href='anonfm-20150329-221050-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>19275kb</td></tr>
+<tr><td>2015</td><td>03</td><td>29</td><td>22:02:32</td><td><a href='anonfm-20150329-220232-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>2403kb</td></tr>
+<tr><td>2015</td><td>03</td><td>29</td><td>21:40:25</td><td><a href='anonfm-20150329-214025-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>6505kb</td></tr>
+<tr><td>2015</td><td>03</td><td>29</td><td>21:05:22</td><td><a href='anonfm-20150329-210522-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>10512kb</td></tr>
+<tr><td>2015</td><td>03</td><td>29</td><td>01:22:03</td><td><a href='anonfm-20150329-012203-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>25930kb</td></tr>
+<tr><td>2015</td><td>03</td><td>28</td><td>23:39:48</td><td><a href='anonfm-20150328-233948-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>24697kb</td></tr>
+<tr><td>2015</td><td>03</td><td>28</td><td>22:48:38</td><td><a href='anonfm-20150328-224838-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>11803kb</td></tr>
+<tr><td>2015</td><td>03</td><td>28</td><td>19:14:52</td><td><a href='anonfm-20150328-191452-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>51664kb</td></tr>
+<tr><td>2015</td><td>03</td><td>28</td><td>19:00:25</td><td><a href='anonfm-20150328-190025-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>3431kb</td></tr>
+<tr><td>2015</td><td>03</td><td>28</td><td>11:27:28</td><td><a href='anonfm-20150328-112728-Le Comte de Saint-Germain.mp3' onclick='showPlayer(this);return false'>Le Comte de Saint-Germain</a></td><td>31844kb</td></tr>
+<tr><td>2015</td><td>03</td><td>28</td><td>10:18:58</td><td><a href='anonfm-20150328-101858-Le Comte de Saint-Germain.mp3' onclick='showPlayer(this);return false'>Le Comte de Saint-Germain</a></td><td>64010kb</td></tr>
+<tr><td>2015</td><td>03</td><td>27</td><td>08:53:51</td><td><a href='anonfm-20150327-085351-Le Comte de Saint-Germain.mp3' onclick='showPlayer(this);return false'>Le Comte de Saint-Germain</a></td><td>55719kb</td></tr>
+<tr><td>2015</td><td>03</td><td>27</td><td>08:18:38</td><td><a href='anonfm-20150327-081838-Le Comte de Saint-Germain.mp3' onclick='showPlayer(this);return false'>Le Comte de Saint-Germain</a></td><td>32795kb</td></tr>
+<tr><td>2015</td><td>03</td><td>27</td><td>00:46:55</td><td><a href='anonfm-20150327-004655-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>17136kb</td></tr>
+<tr><td>2015</td><td>03</td><td>26</td><td>22:22:40</td><td><a href='anonfm-20150326-222240-kroko.mp3' onclick='showPlayer(this);return false'>kroko</a></td><td>110285kb</td></tr>
+<tr><td>2015</td><td>03</td><td>23</td><td>23:04:20</td><td><a href='anonfm-20150323-230420-kroko.mp3' onclick='showPlayer(this);return false'>kroko</a></td><td>109883kb</td></tr>
+<tr><td>2015</td><td>03</td><td>23</td><td>01:13:39</td><td><a href='anonfm-20150323-011339-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>36013kb</td></tr>
+<tr><td>2015</td><td>03</td><td>22</td><td>21:30:47</td><td><a href='anonfm-20150322-213047-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>22250kb</td></tr>
+<tr><td>2015</td><td>03</td><td>21</td><td>21:14:29</td><td><a href='anonfm-20150321-211429-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>34051kb</td></tr>
+<tr><td>2015</td><td>03</td><td>21</td><td>19:36:14</td><td><a href='anonfm-20150321-193614-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>16663kb</td></tr>
+<tr><td>2015</td><td>03</td><td>20</td><td>23:50:26</td><td><a href='anonfm-20150320-235026-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>3938kb</td></tr>
+<tr><td>2015</td><td>03</td><td>20</td><td>23:49:15</td><td><a href='anonfm-20150320-234915-Кулумбека.mp3' onclick='showPlayer(this);return false'>Кулумбека</a></td><td>0kb</td></tr>
+<tr><td>2015</td><td>03</td><td>20</td><td>23:49:00</td><td><a href='anonfm-20150320-234900-Кулумбека.mp3' onclick='showPlayer(this);return false'>Кулумбека</a></td><td>0kb</td></tr>
+<tr><td>2015</td><td>03</td><td>20</td><td>23:48:26</td><td><a href='anonfm-20150320-234826-Кулумбека.mp3' onclick='showPlayer(this);return false'>Кулумбека</a></td><td>0kb</td></tr>
+<tr><td>2015</td><td>03</td><td>20</td><td>23:48:08</td><td><a href='anonfm-20150320-234808-Кулумбека.mp3' onclick='showPlayer(this);return false'>Кулумбека</a></td><td>0kb</td></tr>
+<tr><td>2015</td><td>03</td><td>20</td><td>23:47:52</td><td><a href='anonfm-20150320-234752-Кулумбека.mp3' onclick='showPlayer(this);return false'>Кулумбека</a></td><td>0kb</td></tr>
+<tr><td>2015</td><td>03</td><td>20</td><td>23:01:43</td><td><a href='anonfm-20150320-230143-Кулумбека.mp3' onclick='showPlayer(this);return false'>Кулумбека</a></td><td>42931kb</td></tr>
+<tr><td>2015</td><td>03</td><td>20</td><td>22:48:47</td><td><a href='anonfm-20150320-224847-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>2920kb</td></tr>
+<tr><td>2015</td><td>03</td><td>20</td><td>22:04:44</td><td><a href='anonfm-20150320-220444-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>10057kb</td></tr>
+<tr><td>2015</td><td>03</td><td>20</td><td>22:01:23</td><td><a href='anonfm-20150320-220123-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>335kb</td></tr>
+<tr><td>2015</td><td>03</td><td>20</td><td>21:38:20</td><td><a href='anonfm-20150320-213820-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>4120kb</td></tr>
+<tr><td>2015</td><td>03</td><td>20</td><td>10:28:51</td><td><a href='anonfm-20150320-102851-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>8693kb</td></tr>
+<tr><td>2015</td><td>03</td><td>19</td><td>00:39:01</td><td><a href='anonfm-20150319-003901-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>5174kb</td></tr>
+<tr><td>2015</td><td>03</td><td>18</td><td>22:01:45</td><td><a href='anonfm-20150318-220145-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>2434kb</td></tr>
+<tr><td>2015</td><td>03</td><td>16</td><td>21:41:01</td><td><a href='anonfm-20150316-214101-AlexTrask.mp3' onclick='showPlayer(this);return false'>AlexTrask</a></td><td>58769kb</td></tr>
+<tr><td>2015</td><td>03</td><td>16</td><td>21:40:14</td><td><a href='anonfm-20150316-214014-AlexTrask.mp3' onclick='showPlayer(this);return false'>AlexTrask</a></td><td>140kb</td></tr>
+<tr><td>2015</td><td>03</td><td>16</td><td>02:42:12</td><td><a href='anonfm-20150316-024212-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>3660kb</td></tr>
+<tr><td>2015</td><td>03</td><td>15</td><td>21:01:49</td><td><a href='anonfm-20150315-210149-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>32500kb</td></tr>
+<tr><td>2015</td><td>03</td><td>14</td><td>22:40:01</td><td><a href='anonfm-20150314-224001-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>61110kb</td></tr>
+<tr><td>2015</td><td>03</td><td>14</td><td>22:17:29</td><td><a href='anonfm-20150314-221729-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>116kb</td></tr>
+<tr><td>2015</td><td>03</td><td>14</td><td>20:02:42</td><td><a href='anonfm-20150314-200242-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>31263kb</td></tr>
+<tr><td>2015</td><td>03</td><td>13</td><td>00:37:16</td><td><a href='anonfm-20150313-003716-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>979kb</td></tr>
+<tr><td>2015</td><td>03</td><td>13</td><td>00:33:53</td><td><a href='anonfm-20150313-003353-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>240kb</td></tr>
+<tr><td>2015</td><td>03</td><td>12</td><td>23:20:00</td><td><a href='anonfm-20150312-232000-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>10269kb</td></tr>
+<tr><td>2015</td><td>03</td><td>12</td><td>21:38:27</td><td><a href='anonfm-20150312-213827-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>20508kb</td></tr>
+<tr><td>2015</td><td>03</td><td>12</td><td>21:21:02</td><td><a href='anonfm-20150312-212102-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>2927kb</td></tr>
+<tr><td>2015</td><td>03</td><td>11</td><td>21:01:24</td><td><a href='anonfm-20150311-210124-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>21956kb</td></tr>
+<tr><td>2015</td><td>03</td><td>11</td><td>00:15:16</td><td><a href='anonfm-20150311-001516-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>7230kb</td></tr>
+<tr><td>2015</td><td>03</td><td>11</td><td>00:07:34</td><td><a href='anonfm-20150311-000734-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>242kb</td></tr>
+<tr><td>2015</td><td>03</td><td>10</td><td>22:27:48</td><td><a href='anonfm-20150310-222748-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>23040kb</td></tr>
+<tr><td>2015</td><td>03</td><td>10</td><td>21:34:21</td><td><a href='anonfm-20150310-213421-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>10934kb</td></tr>
+<tr><td>2015</td><td>03</td><td>10</td><td>19:46:18</td><td><a href='anonfm-20150310-194618-Кулумбека.mp3' onclick='showPlayer(this);return false'>Кулумбека</a></td><td>0kb</td></tr>
+<tr><td>2015</td><td>03</td><td>10</td><td>19:46:03</td><td><a href='anonfm-20150310-194603-Кулумбека.mp3' onclick='showPlayer(this);return false'>Кулумбека</a></td><td>0kb</td></tr>
+<tr><td>2015</td><td>03</td><td>10</td><td>19:45:47</td><td><a href='anonfm-20150310-194547-Кулумбека.mp3' onclick='showPlayer(this);return false'>Кулумбека</a></td><td>0kb</td></tr>
+<tr><td>2015</td><td>03</td><td>09</td><td>23:07:55</td><td><a href='anonfm-20150309-230755-kroko.mp3' onclick='showPlayer(this);return false'>kroko</a></td><td>328436kb</td></tr>
+<tr><td>2015</td><td>03</td><td>08</td><td>20:10:35</td><td><a href='anonfm-20150308-201035-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>44353kb</td></tr>
+<tr><td>2015</td><td>03</td><td>08</td><td>12:02:37</td><td><a href='anonfm-20150308-120237-Le Comte de Saint-Germain.mp3' onclick='showPlayer(this);return false'>Le Comte de Saint-Germain</a></td><td>63094kb</td></tr>
+<tr><td>2015</td><td>03</td><td>08</td><td>02:00:44</td><td><a href='anonfm-20150308-020044-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>29865kb</td></tr>
+<tr><td>2015</td><td>03</td><td>08</td><td>01:45:16</td><td><a href='anonfm-20150308-014516-Администрация.mp3' onclick='showPlayer(this);return false'>Администрация</a></td><td>90kb</td></tr>
+<tr><td>2015</td><td>03</td><td>08</td><td>01:17:32</td><td><a href='anonfm-20150308-011732-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>5798kb</td></tr>
+<tr><td>2015</td><td>03</td><td>07</td><td>22:30:29</td><td><a href='anonfm-20150307-223029-Смоук.mp3' onclick='showPlayer(this);return false'>Смоук</a></td><td>65399kb</td></tr>
+<tr><td>2015</td><td>03</td><td>07</td><td>22:14:35</td><td><a href='anonfm-20150307-221435-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>329kb</td></tr>
+<tr><td>2015</td><td>03</td><td>07</td><td>21:00:58</td><td><a href='anonfm-20150307-210058-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>15080kb</td></tr>
+<tr><td>2015</td><td>03</td><td>06</td><td>19:27:28</td><td><a href='anonfm-20150306-192728-Администрация.mp3' onclick='showPlayer(this);return false'>Администрация</a></td><td>10822kb</td></tr>
+<tr><td>2015</td><td>03</td><td>05</td><td>22:19:29</td><td><a href='anonfm-20150305-221929-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>16279kb</td></tr>
+<tr><td>2015</td><td>03</td><td>04</td><td>23:20:17</td><td><a href='anonfm-20150304-232017-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>29418kb</td></tr>
+<tr><td>2015</td><td>03</td><td>04</td><td>23:12:47</td><td><a href='anonfm-20150304-231247-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>815kb</td></tr>
+<tr><td>2015</td><td>03</td><td>04</td><td>21:36:32</td><td><a href='anonfm-20150304-213632-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>25022kb</td></tr>
+<tr><td>2015</td><td>03</td><td>04</td><td>19:56:15</td><td><a href='anonfm-20150304-195615-Le Comte de Saint-Germain.mp3' onclick='showPlayer(this);return false'>Le Comte de Saint-Germain</a></td><td>93469kb</td></tr>
+<tr><td>2015</td><td>03</td><td>03</td><td>18:49:21</td><td><a href='anonfm-20150303-184921-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>3385kb</td></tr>
+<tr><td>2015</td><td>03</td><td>02</td><td>23:55:24</td><td><a href='anonfm-20150302-235524-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>874kb</td></tr>
+<tr><td>2015</td><td>03</td><td>02</td><td>22:21:29</td><td><a href='anonfm-20150302-222129-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>14523kb</td></tr>
+<tr><td>2015</td><td>03</td><td>02</td><td>21:40:36</td><td><a href='anonfm-20150302-214036-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>7256kb</td></tr>
+<tr><td>2015</td><td>03</td><td>02</td><td>21:00:31</td><td><a href='anonfm-20150302-210031-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>4118kb</td></tr>
+<tr><td>2015</td><td>03</td><td>02</td><td>01:01:27</td><td><a href='anonfm-20150302-010127-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>53488kb</td></tr>
+<tr><td>2015</td><td>03</td><td>02</td><td>00:44:57</td><td><a href='anonfm-20150302-004457-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>5kb</td></tr>
+<tr><td>2015</td><td>03</td><td>01</td><td>20:05:52</td><td><a href='anonfm-20150301-200552-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>55560kb</td></tr>
+<tr><td>2015</td><td>03</td><td>01</td><td>10:25:27</td><td><a href='anonfm-20150301-102527-Le Comte de Saint-Germain.mp3' onclick='showPlayer(this);return false'>Le Comte de Saint-Germain</a></td><td>153031kb</td></tr>
+<tr><td>2015</td><td>03</td><td>01</td><td>00:07:07</td><td><a href='anonfm-20150301-000707-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>52124kb</td></tr>
+<tr><td>2015</td><td>02</td><td>28</td><td>22:29:51</td><td><a href='anonfm-20150228-222951-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>5509kb</td></tr>
+<tr><td>2015</td><td>02</td><td>28</td><td>22:23:03</td><td><a href='anonfm-20150228-222303-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>1389kb</td></tr>
+<tr><td>2015</td><td>02</td><td>28</td><td>22:10:07</td><td><a href='anonfm-20150228-221007-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>3123kb</td></tr>
+<tr><td>2015</td><td>02</td><td>28</td><td>22:08:49</td><td><a href='anonfm-20150228-220849-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>248kb</td></tr>
+<tr><td>2015</td><td>02</td><td>28</td><td>21:57:04</td><td><a href='anonfm-20150228-215704-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>2032kb</td></tr>
+<tr><td>2015</td><td>02</td><td>28</td><td>20:30:01</td><td><a href='anonfm-20150228-203001-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>25901kb</td></tr>
+<tr><td>2015</td><td>02</td><td>28</td><td>19:00:57</td><td><a href='anonfm-20150228-190057-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>26560kb</td></tr>
+<tr><td>2015</td><td>02</td><td>26</td><td>20:01:13</td><td><a href='anonfm-20150226-200113-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>7271kb</td></tr>
+<tr><td>2015</td><td>02</td><td>25</td><td>22:27:39</td><td><a href='anonfm-20150225-222739-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>278kb</td></tr>
+<tr><td>2015</td><td>02</td><td>25</td><td>21:03:53</td><td><a href='anonfm-20150225-210353-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>23554kb</td></tr>
+<tr><td>2015</td><td>02</td><td>25</td><td>17:50:59</td><td><a href='anonfm-20150225-175059-starprom.mp3' onclick='showPlayer(this);return false'>starprom</a></td><td>90956kb</td></tr>
+<tr><td>2015</td><td>02</td><td>23</td><td>23:01:09</td><td><a href='anonfm-20150223-230109-kroko.mp3' onclick='showPlayer(this);return false'>kroko</a></td><td>99625kb</td></tr>
+<tr><td>2015</td><td>02</td><td>23</td><td>20:56:07</td><td><a href='anonfm-20150223-205607-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>5kb</td></tr>
+<tr><td>2015</td><td>02</td><td>23</td><td>20:36:54</td><td><a href='anonfm-20150223-203654-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>2910kb</td></tr>
+<tr><td>2015</td><td>02</td><td>22</td><td>21:59:31</td><td><a href='anonfm-20150222-215931-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>31678kb</td></tr>
+<tr><td>2015</td><td>02</td><td>22</td><td>21:14:29</td><td><a href='anonfm-20150222-211429-Смоук.mp3' onclick='showPlayer(this);return false'>Смоук</a></td><td>41611kb</td></tr>
+<tr><td>2015</td><td>02</td><td>22</td><td>21:13:59</td><td><a href='anonfm-20150222-211359-Смоук.mp3' onclick='showPlayer(this);return false'>Смоук</a></td><td>0kb</td></tr>
+<tr><td>2015</td><td>02</td><td>22</td><td>21:08:52</td><td><a href='anonfm-20150222-210852-Смоук.mp3' onclick='showPlayer(this);return false'>Смоук</a></td><td>4782kb</td></tr>
+<tr><td>2015</td><td>02</td><td>22</td><td>21:04:23</td><td><a href='anonfm-20150222-210423-Смоук.mp3' onclick='showPlayer(this);return false'>Смоук</a></td><td>4130kb</td></tr>
+<tr><td>2015</td><td>02</td><td>22</td><td>19:46:38</td><td><a href='anonfm-20150222-194638-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>21938kb</td></tr>
+<tr><td>2015</td><td>02</td><td>22</td><td>18:14:41</td><td><a href='anonfm-20150222-181441-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>20379kb</td></tr>
+<tr><td>2015</td><td>02</td><td>21</td><td>22:11:30</td><td><a href='anonfm-20150221-221130-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>39210kb</td></tr>
+<tr><td>2015</td><td>02</td><td>21</td><td>20:00:47</td><td><a href='anonfm-20150221-200047-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>37348kb</td></tr>
+<tr><td>2015</td><td>02</td><td>20</td><td>23:37:41</td><td><a href='anonfm-20150220-233741-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>14566kb</td></tr>
+<tr><td>2015</td><td>02</td><td>19</td><td>01:58:03</td><td><a href='anonfm-20150219-015803-dj.Trap.mp3' onclick='showPlayer(this);return false'>dj.Trap</a></td><td>91kb</td></tr>
+<tr><td>2015</td><td>02</td><td>18</td><td>22:54:44</td><td><a href='anonfm-20150218-225444-kroko.mp3' onclick='showPlayer(this);return false'>kroko</a></td><td>189332kb</td></tr>
+<tr><td>2015</td><td>02</td><td>18</td><td>20:04:39</td><td><a href='anonfm-20150218-200439-starprom.mp3' onclick='showPlayer(this);return false'>starprom</a></td><td>85609kb</td></tr>
+<tr><td>2015</td><td>02</td><td>17</td><td>22:38:21</td><td><a href='anonfm-20150217-223821-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>4367kb</td></tr>
+<tr><td>2015</td><td>02</td><td>17</td><td>18:37:19</td><td><a href='anonfm-20150217-183719-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>5400kb</td></tr>
+<tr><td>2015</td><td>02</td><td>17</td><td>10:31:14</td><td><a href='anonfm-20150217-103114-Le Comte de Saint-Germain.mp3' onclick='showPlayer(this);return false'>Le Comte de Saint-Germain</a></td><td>106847kb</td></tr>
+<tr><td>2015</td><td>02</td><td>16</td><td>17:20:54</td><td><a href='anonfm-20150216-172054-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>4612kb</td></tr>
+<tr><td>2015</td><td>02</td><td>16</td><td>09:54:53</td><td><a href='anonfm-20150216-095453-Le Comte de Saint-Germain.mp3' onclick='showPlayer(this);return false'>Le Comte de Saint-Germain</a></td><td>43764kb</td></tr>
+<tr><td>2015</td><td>02</td><td>15</td><td>21:25:58</td><td><a href='anonfm-20150215-212558-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>18653kb</td></tr>
+<tr><td>2015</td><td>02</td><td>15</td><td>21:08:33</td><td><a href='anonfm-20150215-210833-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>249kb</td></tr>
+<tr><td>2015</td><td>02</td><td>15</td><td>20:44:55</td><td><a href='anonfm-20150215-204455-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>4606kb</td></tr>
+<tr><td>2015</td><td>02</td><td>15</td><td>20:42:30</td><td><a href='anonfm-20150215-204230-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>330kb</td></tr>
+<tr><td>2015</td><td>02</td><td>15</td><td>19:45:47</td><td><a href='anonfm-20150215-194547-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>9762kb</td></tr>
+<tr><td>2015</td><td>02</td><td>15</td><td>19:45:39</td><td><a href='anonfm-20150215-194539-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>21kb</td></tr>
+<tr><td>2015</td><td>02</td><td>15</td><td>18:25:15</td><td><a href='anonfm-20150215-182515-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>19390kb</td></tr>
+<tr><td>2015</td><td>02</td><td>15</td><td>17:00:34</td><td><a href='anonfm-20150215-170034-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>19374kb</td></tr>
+<tr><td>2015</td><td>02</td><td>15</td><td>10:06:32</td><td><a href='anonfm-20150215-100632-Le Comte de Saint-Germain.mp3' onclick='showPlayer(this);return false'>Le Comte de Saint-Germain</a></td><td>54050kb</td></tr>
+<tr><td>2015</td><td>02</td><td>14</td><td>23:18:59</td><td><a href='anonfm-20150214-231859-dj.Trap.mp3' onclick='showPlayer(this);return false'>dj.Trap</a></td><td>107922kb</td></tr>
+<tr><td>2015</td><td>02</td><td>14</td><td>23:15:18</td><td><a href='anonfm-20150214-231518-dj.Trap.mp3' onclick='showPlayer(this);return false'>dj.Trap</a></td><td>5156kb</td></tr>
+<tr><td>2015</td><td>02</td><td>14</td><td>23:12:35</td><td><a href='anonfm-20150214-231235-dj.Trap.mp3' onclick='showPlayer(this);return false'>dj.Trap</a></td><td>3189kb</td></tr>
+<tr><td>2015</td><td>02</td><td>14</td><td>23:06:42</td><td><a href='anonfm-20150214-230642-dj.Trap.mp3' onclick='showPlayer(this);return false'>dj.Trap</a></td><td>8243kb</td></tr>
+<tr><td>2015</td><td>02</td><td>14</td><td>21:43:18</td><td><a href='anonfm-20150214-214318-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>23813kb</td></tr>
+<tr><td>2015</td><td>02</td><td>14</td><td>21:17:50</td><td><a href='anonfm-20150214-211750-Random Anon 11.mp3' onclick='showPlayer(this);return false'>Random Anon 11</a></td><td>974kb</td></tr>
+<tr><td>2015</td><td>02</td><td>14</td><td>21:13:54</td><td><a href='anonfm-20150214-211354-Random Anon 11.mp3' onclick='showPlayer(this);return false'>Random Anon 11</a></td><td>1339kb</td></tr>
+<tr><td>2015</td><td>02</td><td>14</td><td>21:12:07</td><td><a href='anonfm-20150214-211207-Random Anon 11.mp3' onclick='showPlayer(this);return false'>Random Anon 11</a></td><td>0kb</td></tr>
+<tr><td>2015</td><td>02</td><td>14</td><td>20:03:26</td><td><a href='anonfm-20150214-200326-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>30028kb</td></tr>
+<tr><td>2015</td><td>02</td><td>14</td><td>13:50:38</td><td><a href='anonfm-20150214-135038-sprut.mp3' onclick='showPlayer(this);return false'>sprut</a></td><td>9623kb</td></tr>
+<tr><td>2015</td><td>02</td><td>14</td><td>13:50:12</td><td><a href='anonfm-20150214-135012-sprut.mp3' onclick='showPlayer(this);return false'>sprut</a></td><td>269kb</td></tr>
+<tr><td>2015</td><td>02</td><td>14</td><td>13:48:52</td><td><a href='anonfm-20150214-134852-sprut.mp3' onclick='showPlayer(this);return false'>sprut</a></td><td>1521kb</td></tr>
+<tr><td>2015</td><td>02</td><td>13</td><td>10:09:14</td><td><a href='anonfm-20150213-100914-Le Comte de Saint-Germain.mp3' onclick='showPlayer(this);return false'>Le Comte de Saint-Germain</a></td><td>82132kb</td></tr>
+<tr><td>2015</td><td>02</td><td>13</td><td>09:57:32</td><td><a href='anonfm-20150213-095732-Le Comte de Saint-Germain.mp3' onclick='showPlayer(this);return false'>Le Comte de Saint-Germain</a></td><td>4792kb</td></tr>
+<tr><td>2015</td><td>02</td><td>12</td><td>23:00:24</td><td><a href='anonfm-20150212-230024-kroko.mp3' onclick='showPlayer(this);return false'>kroko</a></td><td>102997kb</td></tr>
+<tr><td>2015</td><td>02</td><td>12</td><td>22:59:56</td><td><a href='anonfm-20150212-225956-kroko.mp3' onclick='showPlayer(this);return false'>kroko</a></td><td>585kb</td></tr>
+<tr><td>2015</td><td>02</td><td>12</td><td>21:49:19</td><td><a href='anonfm-20150212-214919-AlexTrask.mp3' onclick='showPlayer(this);return false'>AlexTrask</a></td><td>55854kb</td></tr>
+<tr><td>2015</td><td>02</td><td>12</td><td>21:48:22</td><td><a href='anonfm-20150212-214822-AlexTrask.mp3' onclick='showPlayer(this);return false'>AlexTrask</a></td><td>787kb</td></tr>
+<tr><td>2015</td><td>02</td><td>12</td><td>17:25:02</td><td><a href='anonfm-20150212-172502-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>25183kb</td></tr>
+<tr><td>2015</td><td>02</td><td>12</td><td>16:46:39</td><td><a href='anonfm-20150212-164639-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>10948kb</td></tr>
+<tr><td>2015</td><td>02</td><td>12</td><td>14:31:49</td><td><a href='anonfm-20150212-143149-Администрация.mp3' onclick='showPlayer(this);return false'>Администрация</a></td><td>168465kb</td></tr>
+<tr><td>2015</td><td>02</td><td>10</td><td>17:32:25</td><td><a href='anonfm-20150210-173225-Фю.mp3' onclick='showPlayer(this);return false'>Фю</a></td><td>26172kb</td></tr>
+<tr><td>2015</td><td>02</td><td>09</td><td>21:40:04</td><td><a href='anonfm-20150209-214004-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>14623kb</td></tr>
+<tr><td>2015</td><td>02</td><td>09</td><td>21:07:34</td><td><a href='anonfm-20150209-210734-Администрация.mp3' onclick='showPlayer(this);return false'>Администрация</a></td><td>43573kb</td></tr>
+<tr><td>2015</td><td>02</td><td>09</td><td>18:40:35</td><td><a href='anonfm-20150209-184035-Администрация.mp3' onclick='showPlayer(this);return false'>Администрация</a></td><td>4031kb</td></tr>
+<tr><td>2015</td><td>02</td><td>09</td><td>00:36:06</td><td><a href='anonfm-20150209-003606-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>93796kb</td></tr>
+<tr><td>2015</td><td>02</td><td>08</td><td>21:56:25</td><td><a href='anonfm-20150208-215625-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>23916kb</td></tr>
+<tr><td>2015</td><td>02</td><td>08</td><td>21:56:02</td><td><a href='anonfm-20150208-215602-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>44kb</td></tr>
+<tr><td>2015</td><td>02</td><td>08</td><td>19:46:07</td><td><a href='anonfm-20150208-194607-Фю.mp3' onclick='showPlayer(this);return false'>Фю</a></td><td>94320kb</td></tr>
+<tr><td>2015</td><td>02</td><td>07</td><td>21:23:32</td><td><a href='anonfm-20150207-212332-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>94309kb</td></tr>
+<tr><td>2015</td><td>02</td><td>07</td><td>15:16:38</td><td><a href='anonfm-20150207-151638-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>9734kb</td></tr>
+<tr><td>2015</td><td>02</td><td>07</td><td>14:41:59</td><td><a href='anonfm-20150207-144159-Администрация.mp3' onclick='showPlayer(this);return false'>Администрация</a></td><td>0kb</td></tr>
+<tr><td>2015</td><td>02</td><td>06</td><td>21:29:50</td><td><a href='anonfm-20150206-212950-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>119153kb</td></tr>
+<tr><td>2015</td><td>02</td><td>05</td><td>23:10:31</td><td><a href='anonfm-20150205-231031-dj.Trap.mp3' onclick='showPlayer(this);return false'>dj.Trap</a></td><td>156370kb</td></tr>
+<tr><td>2015</td><td>02</td><td>05</td><td>22:58:36</td><td><a href='anonfm-20150205-225836-dj.Trap.mp3' onclick='showPlayer(this);return false'>dj.Trap</a></td><td>16702kb</td></tr>
+<tr><td>2015</td><td>02</td><td>05</td><td>22:52:54</td><td><a href='anonfm-20150205-225254-Администрация.mp3' onclick='showPlayer(this);return false'>Администрация</a></td><td>3795kb</td></tr>
+<tr><td>2015</td><td>02</td><td>05</td><td>21:51:15</td><td><a href='anonfm-20150205-215115-ХуиТА.mp3' onclick='showPlayer(this);return false'>ХуиТА</a></td><td>3594kb</td></tr>
+<tr><td>2015</td><td>02</td><td>05</td><td>20:24:31</td><td><a href='anonfm-20150205-202431-Фю.mp3' onclick='showPlayer(this);return false'>Фю</a></td><td>92969kb</td></tr>
+<tr><td>2015</td><td>02</td><td>03</td><td>23:07:45</td><td><a href='anonfm-20150203-230745-ХуиТА.mp3' onclick='showPlayer(this);return false'>ХуиТА</a></td><td>5960kb</td></tr>
+<tr><td>2015</td><td>02</td><td>02</td><td>23:24:10</td><td><a href='anonfm-20150202-232410-dj.Trap.mp3' onclick='showPlayer(this);return false'>dj.Trap</a></td><td>135003kb</td></tr>
+<tr><td>2015</td><td>02</td><td>02</td><td>23:17:28</td><td><a href='anonfm-20150202-231728-dj.Trap.mp3' onclick='showPlayer(this);return false'>dj.Trap</a></td><td>8637kb</td></tr>
+<tr><td>2015</td><td>02</td><td>02</td><td>23:10:23</td><td><a href='anonfm-20150202-231023-dj.Trap.mp3' onclick='showPlayer(this);return false'>dj.Trap</a></td><td>9512kb</td></tr>
+<tr><td>2015</td><td>02</td><td>02</td><td>22:03:49</td><td><a href='anonfm-20150202-220349-ХуиТА.mp3' onclick='showPlayer(this);return false'>ХуиТА</a></td><td>6285kb</td></tr>
+<tr><td>2015</td><td>02</td><td>02</td><td>22:03:41</td><td><a href='anonfm-20150202-220341-ХуиТА.mp3' onclick='showPlayer(this);return false'>ХуиТА</a></td><td>0kb</td></tr>
+<tr><td>2015</td><td>02</td><td>02</td><td>00:02:50</td><td><a href='anonfm-20150202-000250-Администрация.mp3' onclick='showPlayer(this);return false'>Администрация</a></td><td>765kb</td></tr>
+<tr><td>2015</td><td>02</td><td>01</td><td>22:06:32</td><td><a href='anonfm-20150201-220632-ХуиТА.mp3' onclick='showPlayer(this);return false'>ХуиТА</a></td><td>6184kb</td></tr>
+<tr><td>2015</td><td>01</td><td>31</td><td>20:11:27</td><td><a href='anonfm-20150131-201127-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>54867kb</td></tr>
+<tr><td>2015</td><td>01</td><td>31</td><td>01:00:44</td><td><a href='anonfm-20150131-010044-ХуиТА.mp3' onclick='showPlayer(this);return false'>ХуиТА</a></td><td>12054kb</td></tr>
+<tr><td>2015</td><td>01</td><td>31</td><td>01:00:26</td><td><a href='anonfm-20150131-010026-ХуиТА.mp3' onclick='showPlayer(this);return false'>ХуиТА</a></td><td>184kb</td></tr>
+<tr><td>2015</td><td>01</td><td>30</td><td>22:42:47</td><td><a href='anonfm-20150130-224247-Шио.mp3' onclick='showPlayer(this);return false'>Шио</a></td><td>6735kb</td></tr>
+<tr><td>2015</td><td>01</td><td>30</td><td>22:15:47</td><td><a href='anonfm-20150130-221547-Шио.mp3' onclick='showPlayer(this);return false'>Шио</a></td><td>3694kb</td></tr>
+<tr><td>2015</td><td>01</td><td>29</td><td>21:09:24</td><td><a href='anonfm-20150129-210924-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>34322kb</td></tr>
+<tr><td>2015</td><td>01</td><td>29</td><td>13:37:36</td><td><a href='anonfm-20150129-133736-Кулумбека.mp3' onclick='showPlayer(this);return false'>Кулумбека</a></td><td>11154kb</td></tr>
+<tr><td>2015</td><td>01</td><td>29</td><td>00:06:38</td><td><a href='anonfm-20150129-000638-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>1290kb</td></tr>
+<tr><td>2015</td><td>01</td><td>29</td><td>00:05:36</td><td><a href='anonfm-20150129-000536-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>222kb</td></tr>
+<tr><td>2015</td><td>01</td><td>29</td><td>00:03:47</td><td><a href='anonfm-20150129-000347-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>434kb</td></tr>
+<tr><td>2015</td><td>01</td><td>28</td><td>22:28:03</td><td><a href='anonfm-20150128-222803-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>28777kb</td></tr>
+<tr><td>2015</td><td>01</td><td>28</td><td>22:07:31</td><td><a href='anonfm-20150128-220731-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>5981kb</td></tr>
+<tr><td>2015</td><td>01</td><td>28</td><td>21:56:24</td><td><a href='anonfm-20150128-215624-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>1575kb</td></tr>
+<tr><td>2015</td><td>01</td><td>28</td><td>21:47:01</td><td><a href='anonfm-20150128-214701-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>500kb</td></tr>
+<tr><td>2015</td><td>01</td><td>28</td><td>21:17:10</td><td><a href='anonfm-20150128-211710-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>7129kb</td></tr>
+<tr><td>2015</td><td>01</td><td>28</td><td>21:07:26</td><td><a href='anonfm-20150128-210726-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>1992kb</td></tr>
+<tr><td>2015</td><td>01</td><td>28</td><td>01:04:52</td><td><a href='anonfm-20150128-010452-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>2kb</td></tr>
+<tr><td>2015</td><td>01</td><td>27</td><td>21:04:49</td><td><a href='anonfm-20150127-210449-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>34820kb</td></tr>
+<tr><td>2015</td><td>01</td><td>27</td><td>19:49:03</td><td><a href='anonfm-20150127-194903-Кулумбека.mp3' onclick='showPlayer(this);return false'>Кулумбека</a></td><td>0kb</td></tr>
+<tr><td>2015</td><td>01</td><td>27</td><td>19:48:47</td><td><a href='anonfm-20150127-194847-Кулумбека.mp3' onclick='showPlayer(this);return false'>Кулумбека</a></td><td>0kb</td></tr>
+<tr><td>2015</td><td>01</td><td>27</td><td>19:47:58</td><td><a href='anonfm-20150127-194758-Кулумбека.mp3' onclick='showPlayer(this);return false'>Кулумбека</a></td><td>412kb</td></tr>
+<tr><td>2015</td><td>01</td><td>24</td><td>21:03:49</td><td><a href='anonfm-20150124-210349-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>36505kb</td></tr>
+<tr><td>2015</td><td>01</td><td>23</td><td>18:30:31</td><td><a href='anonfm-20150123-183031-Шио.mp3' onclick='showPlayer(this);return false'>Шио</a></td><td>134371kb</td></tr>
+<tr><td>2015</td><td>01</td><td>23</td><td>18:01:52</td><td><a href='anonfm-20150123-180152-Шио.mp3' onclick='showPlayer(this);return false'>Шио</a></td><td>39954kb</td></tr>
+<tr><td>2015</td><td>01</td><td>22</td><td>19:32:33</td><td><a href='anonfm-20150122-193233-Смоук.mp3' onclick='showPlayer(this);return false'>Смоук</a></td><td>55058kb</td></tr>
+<tr><td>2015</td><td>01</td><td>18</td><td>21:08:39</td><td><a href='anonfm-20150118-210839-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>37463kb</td></tr>
+<tr><td>2015</td><td>01</td><td>17</td><td>21:01:54</td><td><a href='anonfm-20150117-210154-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>78213kb</td></tr>
+<tr><td>2015</td><td>01</td><td>17</td><td>21:01:04</td><td><a href='anonfm-20150117-210104-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>176kb</td></tr>
+<tr><td>2015</td><td>01</td><td>17</td><td>21:01:03</td><td><a href='anonfm-20150117-210103-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>0kb</td></tr>
+<tr><td>2015</td><td>01</td><td>16</td><td>17:33:53</td><td><a href='anonfm-20150116-173353-Шио.mp3' onclick='showPlayer(this);return false'>Шио</a></td><td>0kb</td></tr>
+<tr><td>2015</td><td>01</td><td>16</td><td>16:00:15</td><td><a href='anonfm-20150116-160015-Шио.mp3' onclick='showPlayer(this);return false'>Шио</a></td><td>129793kb</td></tr>
+<tr><td>2015</td><td>01</td><td>14</td><td>00:59:00</td><td><a href='anonfm-20150114-005900-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>219934kb</td></tr>
+<tr><td>2015</td><td>01</td><td>14</td><td>00:03:22</td><td><a href='anonfm-20150114-000322-kroko.mp3' onclick='showPlayer(this);return false'>kroko</a></td><td>43854kb</td></tr>
+<tr><td>2015</td><td>01</td><td>13</td><td>21:02:54</td><td><a href='anonfm-20150113-210254-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>53462kb</td></tr>
+<tr><td>2015</td><td>01</td><td>12</td><td>20:50:46</td><td><a href='anonfm-20150112-205046-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>1734kb</td></tr>
+<tr><td>2015</td><td>01</td><td>11</td><td>20:32:16</td><td><a href='anonfm-20150111-203216-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>50735kb</td></tr>
+<tr><td>2015</td><td>01</td><td>11</td><td>01:02:54</td><td><a href='anonfm-20150111-010254-Шио.mp3' onclick='showPlayer(this);return false'>Шио</a></td><td>198559kb</td></tr>
+<tr><td>2015</td><td>01</td><td>11</td><td>00:00:26</td><td><a href='anonfm-20150111-000026-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>18632kb</td></tr>
+<tr><td>2015</td><td>01</td><td>10</td><td>22:03:04</td><td><a href='anonfm-20150110-220304-starprom.mp3' onclick='showPlayer(this);return false'>starprom</a></td><td>2387kb</td></tr>
+<tr><td>2015</td><td>01</td><td>10</td><td>21:09:36</td><td><a href='anonfm-20150110-210936-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>11317kb</td></tr>
+<tr><td>2015</td><td>01</td><td>10</td><td>20:36:14</td><td><a href='anonfm-20150110-203614-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>9104kb</td></tr>
+<tr><td>2015</td><td>01</td><td>10</td><td>20:01:23</td><td><a href='anonfm-20150110-200123-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>9370kb</td></tr>
+<tr><td>2015</td><td>01</td><td>10</td><td>20:01:08</td><td><a href='anonfm-20150110-200108-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>46kb</td></tr>
+<tr><td>2015</td><td>01</td><td>10</td><td>02:00:37</td><td><a href='anonfm-20150110-020037-fedor.mp3' onclick='showPlayer(this);return false'>fedor</a></td><td>130024kb</td></tr>
+<tr><td>2015</td><td>01</td><td>10</td><td>01:55:27</td><td><a href='anonfm-20150110-015527-fedor.mp3' onclick='showPlayer(this);return false'>fedor</a></td><td>6772kb</td></tr>
+<tr><td>2015</td><td>01</td><td>10</td><td>01:30:12</td><td><a href='anonfm-20150110-013012-fedor.mp3' onclick='showPlayer(this);return false'>fedor</a></td><td>9680kb</td></tr>
+<tr><td>2015</td><td>01</td><td>10</td><td>01:29:10</td><td><a href='anonfm-20150110-012910-fedor.mp3' onclick='showPlayer(this);return false'>fedor</a></td><td>60kb</td></tr>
+<tr><td>2015</td><td>01</td><td>10</td><td>01:08:02</td><td><a href='anonfm-20150110-010802-fedor.mp3' onclick='showPlayer(this);return false'>fedor</a></td><td>4418kb</td></tr>
+<tr><td>2015</td><td>01</td><td>09</td><td>01:00:14</td><td><a href='anonfm-20150109-010014-Шио.mp3' onclick='showPlayer(this);return false'>Шио</a></td><td>168534kb</td></tr>
+<tr><td>2015</td><td>01</td><td>07</td><td>13:51:31</td><td><a href='anonfm-20150107-135131-Администрация.mp3' onclick='showPlayer(this);return false'>Администрация</a></td><td>63303kb</td></tr>
+<tr><td>2015</td><td>01</td><td>07</td><td>01:57:11</td><td><a href='anonfm-20150107-015711-Шио.mp3' onclick='showPlayer(this);return false'>Шио</a></td><td>89051kb</td></tr>
+<tr><td>2015</td><td>01</td><td>07</td><td>01:24:55</td><td><a href='anonfm-20150107-012455-Шио.mp3' onclick='showPlayer(this);return false'>Шио</a></td><td>44132kb</td></tr>
+<tr><td>2015</td><td>01</td><td>06</td><td>23:01:42</td><td><a href='anonfm-20150106-230142-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>25656kb</td></tr>
+<tr><td>2015</td><td>01</td><td>05</td><td>22:13:32</td><td><a href='anonfm-20150105-221332-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>32558kb</td></tr>
+<tr><td>2015</td><td>01</td><td>04</td><td>21:17:08</td><td><a href='anonfm-20150104-211708-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>38750kb</td></tr>
+<tr><td>2015</td><td>01</td><td>04</td><td>18:30:07</td><td><a href='anonfm-20150104-183007-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>20596kb</td></tr>
+<tr><td>2015</td><td>01</td><td>02</td><td>21:04:20</td><td><a href='anonfm-20150102-210420-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>60386kb</td></tr>
+<tr><td>2015</td><td>01</td><td>02</td><td>02:51:35</td><td><a href='anonfm-20150102-025135-Шио.mp3' onclick='showPlayer(this);return false'>Шио</a></td><td>103606kb</td></tr>
+<tr><td>2015</td><td>01</td><td>02</td><td>02:00:26</td><td><a href='anonfm-20150102-020026-Шио.mp3' onclick='showPlayer(this);return false'>Шио</a></td><td>52631kb</td></tr>
+<tr><td>2015</td><td>01</td><td>01</td><td>20:15:35</td><td><a href='anonfm-20150101-201535-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>96389kb</td></tr>
+<tr><td>2015</td><td>01</td><td>01</td><td>04:55:04</td><td><a href='anonfm-20150101-045504-Шио.mp3' onclick='showPlayer(this);return false'>Шио</a></td><td>130366kb</td></tr>
+<tr><td>2015</td><td>01</td><td>01</td><td>03:00:05</td><td><a href='anonfm-20150101-030005-Администрация.mp3' onclick='showPlayer(this);return false'>Администрация</a></td><td>6290kb</td></tr>
+<tr><td>2015</td><td>01</td><td>01</td><td>02:04:36</td><td><a href='anonfm-20150101-020436-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>160kb</td></tr>
+<tr><td>2015</td><td>01</td><td>01</td><td>01:34:00</td><td><a href='anonfm-20150101-013400-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>9126kb</td></tr>
+<tr><td>2015</td><td>01</td><td>01</td><td>01:19:35</td><td><a href='anonfm-20150101-011935-starprom.mp3' onclick='showPlayer(this);return false'>starprom</a></td><td>109463kb</td></tr>
+<tr><td>2015</td><td>01</td><td>01</td><td>00:30:50</td><td><a href='anonfm-20150101-003050-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>18542kb</td></tr>
+<tr><td>2014</td><td>12</td><td>31</td><td>22:00:27</td><td><a href='anonfm-20141231-220027-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>41101kb</td></tr>
+<tr><td>2014</td><td>12</td><td>31</td><td>22:00:18</td><td><a href='anonfm-20141231-220018-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>35kb</td></tr>
+<tr><td>2014</td><td>12</td><td>31</td><td>21:00:00</td><td><a href='anonfm-20141231-210000-newyear.mp3' onclick='showPlayer(this);return false'>newyear</a></td><td>84368kb</td></tr>
+<tr><td>2014</td><td>12</td><td>31</td><td>20:00:00</td><td><a href='anonfm-20141231-200000-newyear.mp3' onclick='showPlayer(this);return false'>newyear</a></td><td>84379kb</td></tr>
+<tr><td>2014</td><td>12</td><td>31</td><td>16:00:00</td><td><a href='anonfm-20141231-160000-starprom.mp3' onclick='showPlayer(this);return false'>starprom</a></td><td>111537kb</td></tr>
+<tr><td>2014</td><td>12</td><td>31</td><td>04:00:00</td><td><a href='anonfm-20141231-040000-kroko.mp3' onclick='showPlayer(this);return false'>kroko</a></td><td>84371kb</td></tr>
+<tr><td>2014</td><td>12</td><td>31</td><td>03:00:00</td><td><a href='anonfm-20141231-030000-kroko.mp3' onclick='showPlayer(this);return false'>kroko</a></td><td>84374kb</td></tr>
+<tr><td>2014</td><td>12</td><td>31</td><td>02:00:00</td><td><a href='anonfm-20141231-020000-kroko.mp3' onclick='showPlayer(this);return false'>kroko</a></td><td>84384kb</td></tr>
+<tr><td>2014</td><td>12</td><td>31</td><td>01:00:00</td><td><a href='anonfm-20141231-010000-kroko.mp3' onclick='showPlayer(this);return false'>kroko</a></td><td>82049kb</td></tr>
+<tr><td>2014</td><td>12</td><td>30</td><td>21:23:12</td><td><a href='anonfm-20141230-212312-Администрация.mp3' onclick='showPlayer(this);return false'>Администрация</a></td><td>243508kb</td></tr>
+<tr><td>2014</td><td>12</td><td>29</td><td>23:42:53</td><td><a href='anonfm-20141229-234253-Администрация.mp3' onclick='showPlayer(this);return false'>Администрация</a></td><td>12335kb</td></tr>
+<tr><td>2014</td><td>12</td><td>29</td><td>22:00:27</td><td><a href='anonfm-20141229-220027-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>25050kb</td></tr>
+<tr><td>2014</td><td>12</td><td>29</td><td>20:52:13</td><td><a href='anonfm-20141229-205213-pyro.mp3' onclick='showPlayer(this);return false'>pyro</a></td><td>0kb</td></tr>
+<tr><td>2014</td><td>12</td><td>28</td><td>19:13:32</td><td><a href='anonfm-20141228-191332-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>33436kb</td></tr>
+<tr><td>2014</td><td>12</td><td>28</td><td>18:54:45</td><td><a href='anonfm-20141228-185445-pyro.mp3' onclick='showPlayer(this);return false'>pyro</a></td><td>0kb</td></tr>
+<tr><td>2014</td><td>12</td><td>28</td><td>18:44:49</td><td><a href='anonfm-20141228-184449-pyro.mp3' onclick='showPlayer(this);return false'>pyro</a></td><td>21187kb</td></tr>
+<tr><td>2014</td><td>12</td><td>28</td><td>18:09:28</td><td><a href='anonfm-20141228-180928-pyro.mp3' onclick='showPlayer(this);return false'>pyro</a></td><td>77334kb</td></tr>
+<tr><td>2014</td><td>12</td><td>27</td><td>23:11:07</td><td><a href='anonfm-20141227-231107-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>25905kb</td></tr>
+<tr><td>2014</td><td>12</td><td>27</td><td>22:00:40</td><td><a href='anonfm-20141227-220040-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>11677kb</td></tr>
+<tr><td>2014</td><td>12</td><td>27</td><td>21:47:25</td><td><a href='anonfm-20141227-214725-pyro.mp3' onclick='showPlayer(this);return false'>pyro</a></td><td>29108kb</td></tr>
+<tr><td>2014</td><td>12</td><td>27</td><td>21:04:56</td><td><a href='anonfm-20141227-210456-pyro.mp3' onclick='showPlayer(this);return false'>pyro</a></td><td>98660kb</td></tr>
+<tr><td>2014</td><td>12</td><td>27</td><td>19:04:10</td><td><a href='anonfm-20141227-190410-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>35790kb</td></tr>
+<tr><td>2014</td><td>12</td><td>27</td><td>16:34:17</td><td><a href='anonfm-20141227-163417-Внучаев.mp3' onclick='showPlayer(this);return false'>Внучаев</a></td><td>240kb</td></tr>
+<tr><td>2014</td><td>12</td><td>27</td><td>16:33:44</td><td><a href='anonfm-20141227-163344-Внучаев.mp3' onclick='showPlayer(this);return false'>Внучаев</a></td><td>409kb</td></tr>
+<tr><td>2014</td><td>12</td><td>27</td><td>16:33:18</td><td><a href='anonfm-20141227-163318-Внучаев.mp3' onclick='showPlayer(this);return false'>Внучаев</a></td><td>177kb</td></tr>
+<tr><td>2014</td><td>12</td><td>27</td><td>16:32:51</td><td><a href='anonfm-20141227-163251-Внучаев.mp3' onclick='showPlayer(this);return false'>Внучаев</a></td><td>174kb</td></tr>
+<tr><td>2014</td><td>12</td><td>27</td><td>16:28:17</td><td><a href='anonfm-20141227-162817-Внучаев.mp3' onclick='showPlayer(this);return false'>Внучаев</a></td><td>4043kb</td></tr>
+<tr><td>2014</td><td>12</td><td>26</td><td>22:00:09</td><td><a href='anonfm-20141226-220009-Шио.mp3' onclick='showPlayer(this);return false'>Шио</a></td><td>139998kb</td></tr>
+<tr><td>2014</td><td>12</td><td>26</td><td>00:00:11</td><td><a href='anonfm-20141226-000011-Шио.mp3' onclick='showPlayer(this);return false'>Шио</a></td><td>85279kb</td></tr>
+<tr><td>2014</td><td>12</td><td>25</td><td>20:15:33</td><td><a href='anonfm-20141225-201533-sprut.mp3' onclick='showPlayer(this);return false'>sprut</a></td><td>240682kb</td></tr>
+<tr><td>2014</td><td>12</td><td>25</td><td>20:10:17</td><td><a href='anonfm-20141225-201017-sprut.mp3' onclick='showPlayer(this);return false'>sprut</a></td><td>0kb</td></tr>
+<tr><td>2014</td><td>12</td><td>25</td><td>20:01:22</td><td><a href='anonfm-20141225-200122-sprut.mp3' onclick='showPlayer(this);return false'>sprut</a></td><td>12318kb</td></tr>
+<tr><td>2014</td><td>12</td><td>25</td><td>00:11:18</td><td><a href='anonfm-20141225-001118-Шио.mp3' onclick='showPlayer(this);return false'>Шио</a></td><td>43916kb</td></tr>
+<tr><td>2014</td><td>12</td><td>24</td><td>23:37:32</td><td><a href='anonfm-20141224-233732-Внучаев.mp3' onclick='showPlayer(this);return false'>Внучаев</a></td><td>31368kb</td></tr>
+<tr><td>2014</td><td>12</td><td>24</td><td>23:32:04</td><td><a href='anonfm-20141224-233204-Внучаев.mp3' onclick='showPlayer(this);return false'>Внучаев</a></td><td>3019kb</td></tr>
+<tr><td>2014</td><td>12</td><td>24</td><td>21:22:03</td><td><a href='anonfm-20141224-212203-sprut.mp3' onclick='showPlayer(this);return false'>sprut</a></td><td>1432kb</td></tr>
+<tr><td>2014</td><td>12</td><td>24</td><td>21:00:59</td><td><a href='anonfm-20141224-210059-Внучаев.mp3' onclick='showPlayer(this);return false'>Внучаев</a></td><td>29345kb</td></tr>
+<tr><td>2014</td><td>12</td><td>24</td><td>19:35:40</td><td><a href='anonfm-20141224-193540-sprut.mp3' onclick='showPlayer(this);return false'>sprut</a></td><td>121956kb</td></tr>
+<tr><td>2014</td><td>12</td><td>24</td><td>19:35:39</td><td><a href='anonfm-20141224-193539-sprut.mp3' onclick='showPlayer(this);return false'>sprut</a></td><td>20kb</td></tr>
+<tr><td>2014</td><td>12</td><td>24</td><td>19:35:13</td><td><a href='anonfm-20141224-193513-sprut.mp3' onclick='showPlayer(this);return false'>sprut</a></td><td>0kb</td></tr>
+<tr><td>2014</td><td>12</td><td>24</td><td>19:33:33</td><td><a href='anonfm-20141224-193333-sprut.mp3' onclick='showPlayer(this);return false'>sprut</a></td><td>0kb</td></tr>
+<tr><td>2014</td><td>12</td><td>23</td><td>00:59:26</td><td><a href='anonfm-20141223-005926-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>2891kb</td></tr>
+<tr><td>2014</td><td>12</td><td>21</td><td>22:33:19</td><td><a href='anonfm-20141221-223319-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>15326kb</td></tr>
+<tr><td>2014</td><td>12</td><td>21</td><td>22:15:36</td><td><a href='anonfm-20141221-221536-Администрация.mp3' onclick='showPlayer(this);return false'>Администрация</a></td><td>1083kb</td></tr>
+<tr><td>2014</td><td>12</td><td>21</td><td>22:13:53</td><td><a href='anonfm-20141221-221353-pyro.mp3' onclick='showPlayer(this);return false'>pyro</a></td><td>0kb</td></tr>
+<tr><td>2014</td><td>12</td><td>21</td><td>22:12:52</td><td><a href='anonfm-20141221-221252-pyro.mp3' onclick='showPlayer(this);return false'>pyro</a></td><td>0kb</td></tr>
+<tr><td>2014</td><td>12</td><td>21</td><td>22:10:06</td><td><a href='anonfm-20141221-221006-pyro.mp3' onclick='showPlayer(this);return false'>pyro</a></td><td>0kb</td></tr>
+<tr><td>2014</td><td>12</td><td>21</td><td>21:23:26</td><td><a href='anonfm-20141221-212326-Смоук.mp3' onclick='showPlayer(this);return false'>Смоук</a></td><td>40369kb</td></tr>
+<tr><td>2014</td><td>12</td><td>21</td><td>21:20:38</td><td><a href='anonfm-20141221-212038-Смоук.mp3' onclick='showPlayer(this);return false'>Смоук</a></td><td>2337kb</td></tr>
+<tr><td>2014</td><td>12</td><td>21</td><td>21:14:38</td><td><a href='anonfm-20141221-211438-Администрация.mp3' onclick='showPlayer(this);return false'>Администрация</a></td><td>6522kb</td></tr>
+<tr><td>2014</td><td>12</td><td>21</td><td>21:09:45</td><td><a href='anonfm-20141221-210945-Смоук.mp3' onclick='showPlayer(this);return false'>Смоук</a></td><td>2706kb</td></tr>
+<tr><td>2014</td><td>12</td><td>21</td><td>20:44:55</td><td><a href='anonfm-20141221-204455-Шио.mp3' onclick='showPlayer(this);return false'>Шио</a></td><td>12311kb</td></tr>
+<tr><td>2014</td><td>12</td><td>21</td><td>18:00:04</td><td><a href='anonfm-20141221-180004-Шио.mp3' onclick='showPlayer(this);return false'>Шио</a></td><td>62307kb</td></tr>
+<tr><td>2014</td><td>12</td><td>20</td><td>21:00:46</td><td><a href='anonfm-20141220-210046-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>77893kb</td></tr>
+<tr><td>2014</td><td>12</td><td>19</td><td>22:36:40</td><td><a href='anonfm-20141219-223640-AlexTrask.mp3' onclick='showPlayer(this);return false'>AlexTrask</a></td><td>64591kb</td></tr>
+<tr><td>2014</td><td>12</td><td>16</td><td>20:09:32</td><td><a href='anonfm-20141216-200932-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>6914kb</td></tr>
+<tr><td>2014</td><td>12</td><td>16</td><td>19:01:15</td><td><a href='anonfm-20141216-190115-Смоук.mp3' onclick='showPlayer(this);return false'>Смоук</a></td><td>53544kb</td></tr>
+<tr><td>2014</td><td>12</td><td>16</td><td>01:00:38</td><td><a href='anonfm-20141216-010038-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>4182kb</td></tr>
+<tr><td>2014</td><td>12</td><td>15</td><td>15:16:57</td><td><a href='anonfm-20141215-151657-Шио.mp3' onclick='showPlayer(this);return false'>Шио</a></td><td>144977kb</td></tr>
+<tr><td>2014</td><td>12</td><td>14</td><td>21:48:32</td><td><a href='anonfm-20141214-214832-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>26145kb</td></tr>
+<tr><td>2014</td><td>12</td><td>13</td><td>22:41:01</td><td><a href='anonfm-20141213-224101-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>41296kb</td></tr>
+<tr><td>2014</td><td>12</td><td>13</td><td>21:43:28</td><td><a href='anonfm-20141213-214328-Смоук.mp3' onclick='showPlayer(this);return false'>Смоук</a></td><td>29836kb</td></tr>
+<tr><td>2014</td><td>12</td><td>13</td><td>19:44:02</td><td><a href='anonfm-20141213-194402-Смоук.mp3' onclick='showPlayer(this);return false'>Смоук</a></td><td>97681kb</td></tr>
+<tr><td>2014</td><td>12</td><td>13</td><td>15:00:25</td><td><a href='anonfm-20141213-150025-Шио.mp3' onclick='showPlayer(this);return false'>Шио</a></td><td>170503kb</td></tr>
+<tr><td>2014</td><td>12</td><td>12</td><td>20:12:21</td><td><a href='anonfm-20141212-201221-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>55494kb</td></tr>
+<tr><td>2014</td><td>12</td><td>12</td><td>16:49:35</td><td><a href='anonfm-20141212-164935-Шио.mp3' onclick='showPlayer(this);return false'>Шио</a></td><td>21085kb</td></tr>
+<tr><td>2014</td><td>12</td><td>12</td><td>04:36:43</td><td><a href='anonfm-20141212-043643-Keksigg.mp3' onclick='showPlayer(this);return false'>Keksigg</a></td><td>81389kb</td></tr>
+<tr><td>2014</td><td>12</td><td>12</td><td>04:05:24</td><td><a href='anonfm-20141212-040524-Keksigg.ogg' onclick='showPlayer(this);return false'>Keksigg</a></td><td>12kb</td></tr>
+<tr><td>2014</td><td>12</td><td>11</td><td>20:00:38</td><td><a href='anonfm-20141211-200038-Смоук.mp3' onclick='showPlayer(this);return false'>Смоук</a></td><td>59150kb</td></tr>
+<tr><td>2014</td><td>12</td><td>11</td><td>15:24:53</td><td><a href='anonfm-20141211-152453-Шио.mp3' onclick='showPlayer(this);return false'>Шио</a></td><td>128328kb</td></tr>
+<tr><td>2014</td><td>12</td><td>11</td><td>15:07:01</td><td><a href='anonfm-20141211-150701-Шио.mp3' onclick='showPlayer(this);return false'>Шио</a></td><td>1856kb</td></tr>
+<tr><td>2014</td><td>12</td><td>11</td><td>15:05:59</td><td><a href='anonfm-20141211-150559-Шио.mp3' onclick='showPlayer(this);return false'>Шио</a></td><td>394kb</td></tr>
+<tr><td>2014</td><td>12</td><td>10</td><td>22:45:06</td><td><a href='anonfm-20141210-224506-Смоук.mp3' onclick='showPlayer(this);return false'>Смоук</a></td><td>40247kb</td></tr>
+<tr><td>2014</td><td>12</td><td>08</td><td>19:59:33</td><td><a href='anonfm-20141208-195933-AlexTrask.mp3' onclick='showPlayer(this);return false'>AlexTrask</a></td><td>95305kb</td></tr>
+<tr><td>2014</td><td>12</td><td>08</td><td>01:35:51</td><td><a href='anonfm-20141208-013551-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>104044kb</td></tr>
+<tr><td>2014</td><td>12</td><td>07</td><td>22:00:43</td><td><a href='anonfm-20141207-220043-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>20491kb</td></tr>
+<tr><td>2014</td><td>12</td><td>07</td><td>01:10:37</td><td><a href='anonfm-20141207-011037-indaair.mp3' onclick='showPlayer(this);return false'>indaair</a></td><td>74107kb</td></tr>
+<tr><td>2014</td><td>12</td><td>07</td><td>00:29:46</td><td><a href='anonfm-20141207-002946-indaair.mp3' onclick='showPlayer(this);return false'>indaair</a></td><td>57325kb</td></tr>
+<tr><td>2014</td><td>12</td><td>07</td><td>00:17:53</td><td><a href='anonfm-20141207-001753-indaair.mp3' onclick='showPlayer(this);return false'>indaair</a></td><td>16701kb</td></tr>
+<tr><td>2014</td><td>12</td><td>06</td><td>21:26:28</td><td><a href='anonfm-20141206-212628-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>51718kb</td></tr>
+<tr><td>2014</td><td>12</td><td>06</td><td>14:43:11</td><td><a href='anonfm-20141206-144311-Шио.mp3' onclick='showPlayer(this);return false'>Шио</a></td><td>0kb</td></tr>
+<tr><td>2014</td><td>12</td><td>06</td><td>14:41:55</td><td><a href='anonfm-20141206-144155-Шио.mp3' onclick='showPlayer(this);return false'>Шио</a></td><td>868kb</td></tr>
+<tr><td>2014</td><td>12</td><td>06</td><td>14:25:24</td><td><a href='anonfm-20141206-142524-Шио.mp3' onclick='showPlayer(this);return false'>Шио</a></td><td>749kb</td></tr>
+<tr><td>2014</td><td>12</td><td>05</td><td>18:21:41</td><td><a href='anonfm-20141205-182141-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>8684kb</td></tr>
+<tr><td>2014</td><td>12</td><td>05</td><td>18:06:02</td><td><a href='anonfm-20141205-180602-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>2484kb</td></tr>
+<tr><td>2014</td><td>12</td><td>05</td><td>16:00:02</td><td><a href='anonfm-20141205-160002-Шио.mp3' onclick='showPlayer(this);return false'>Шио</a></td><td>175881kb</td></tr>
+<tr><td>2014</td><td>12</td><td>04</td><td>10:00:21</td><td><a href='anonfm-20141204-100021-Le Comte de Saint-Germain.mp3' onclick='showPlayer(this);return false'>Le Comte de Saint-Germain</a></td><td>115361kb</td></tr>
+<tr><td>2014</td><td>12</td><td>04</td><td>09:50:30</td><td><a href='anonfm-20141204-095030-Le Comte de Saint-Germain.mp3' onclick='showPlayer(this);return false'>Le Comte de Saint-Germain</a></td><td>3430kb</td></tr>
+<tr><td>2014</td><td>12</td><td>02</td><td>01:05:30</td><td><a href='anonfm-20141202-010530-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>7kb</td></tr>
+<tr><td>2014</td><td>12</td><td>01</td><td>22:05:45</td><td><a href='anonfm-20141201-220545-Администрация.mp3' onclick='showPlayer(this);return false'>Администрация</a></td><td>4677kb</td></tr>
+<tr><td>2014</td><td>12</td><td>01</td><td>00:38:01</td><td><a href='anonfm-20141201-003801-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>136772kb</td></tr>
+<tr><td>2014</td><td>11</td><td>30</td><td>21:08:40</td><td><a href='anonfm-20141130-210840-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>33875kb</td></tr>
+<tr><td>2014</td><td>11</td><td>30</td><td>19:41:51</td><td><a href='anonfm-20141130-194151-Смоук.mp3' onclick='showPlayer(this);return false'>Смоук</a></td><td>57497kb</td></tr>
+<tr><td>2014</td><td>11</td><td>29</td><td>21:22:22</td><td><a href='anonfm-20141129-212222-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>48164kb</td></tr>
+<tr><td>2014</td><td>11</td><td>29</td><td>18:30:02</td><td><a href='anonfm-20141129-183002-starprom.mp3' onclick='showPlayer(this);return false'>starprom</a></td><td>122113kb</td></tr>
+<tr><td>2014</td><td>11</td><td>29</td><td>14:10:25</td><td><a href='anonfm-20141129-141025-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>42606kb</td></tr>
+<tr><td>2014</td><td>11</td><td>29</td><td>10:45:45</td><td><a href='anonfm-20141129-104545-Внучаев.mp3' onclick='showPlayer(this);return false'>Внучаев</a></td><td>17028kb</td></tr>
+<tr><td>2014</td><td>11</td><td>28</td><td>21:44:55</td><td><a href='anonfm-20141128-214455-AlexTrask.mp3' onclick='showPlayer(this);return false'>AlexTrask</a></td><td>32316kb</td></tr>
+<tr><td>2014</td><td>11</td><td>28</td><td>21:06:46</td><td><a href='anonfm-20141128-210646-AlexTrask.mp3' onclick='showPlayer(this);return false'>AlexTrask</a></td><td>3572kb</td></tr>
+<tr><td>2014</td><td>11</td><td>28</td><td>21:05:44</td><td><a href='anonfm-20141128-210544-AlexTrask.mp3' onclick='showPlayer(this);return false'>AlexTrask</a></td><td>1045kb</td></tr>
+<tr><td>2014</td><td>11</td><td>28</td><td>21:01:11</td><td><a href='anonfm-20141128-210111-AlexTrask.mp3' onclick='showPlayer(this);return false'>AlexTrask</a></td><td>5413kb</td></tr>
+<tr><td>2014</td><td>11</td><td>28</td><td>21:00:34</td><td><a href='anonfm-20141128-210034-AlexTrask.mp3' onclick='showPlayer(this);return false'>AlexTrask</a></td><td>389kb</td></tr>
+<tr><td>2014</td><td>11</td><td>28</td><td>14:33:29</td><td><a href='anonfm-20141128-143329-starprom.mp3' onclick='showPlayer(this);return false'>starprom</a></td><td>19063kb</td></tr>
+<tr><td>2014</td><td>11</td><td>28</td><td>13:15:01</td><td><a href='anonfm-20141128-131501-starprom.mp3' onclick='showPlayer(this);return false'>starprom</a></td><td>110147kb</td></tr>
+<tr><td>2014</td><td>11</td><td>27</td><td>19:48:13</td><td><a href='anonfm-20141127-194813-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>18434kb</td></tr>
+<tr><td>2014</td><td>11</td><td>27</td><td>19:47:44</td><td><a href='anonfm-20141127-194744-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>32kb</td></tr>
+<tr><td>2014</td><td>11</td><td>27</td><td>19:05:07</td><td><a href='anonfm-20141127-190507-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>12503kb</td></tr>
+<tr><td>2014</td><td>11</td><td>27</td><td>18:54:43</td><td><a href='anonfm-20141127-185443-Смоук.mp3' onclick='showPlayer(this);return false'>Смоук</a></td><td>3899kb</td></tr>
+<tr><td>2014</td><td>11</td><td>27</td><td>18:32:39</td><td><a href='anonfm-20141127-183239-Смоук.mp3' onclick='showPlayer(this);return false'>Смоук</a></td><td>13717kb</td></tr>
+<tr><td>2014</td><td>11</td><td>26</td><td>00:51:04</td><td><a href='anonfm-20141126-005104-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>2957kb</td></tr>
+<tr><td>2014</td><td>11</td><td>25</td><td>23:02:34</td><td><a href='anonfm-20141125-230234-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>5066kb</td></tr>
+<tr><td>2014</td><td>11</td><td>25</td><td>22:07:59</td><td><a href='anonfm-20141125-220759-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>1747kb</td></tr>
+<tr><td>2014</td><td>11</td><td>25</td><td>20:15:08</td><td><a href='anonfm-20141125-201508-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>754kb</td></tr>
+<tr><td>2014</td><td>11</td><td>25</td><td>19:45:58</td><td><a href='anonfm-20141125-194558-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>8673kb</td></tr>
+<tr><td>2014</td><td>11</td><td>25</td><td>19:34:40</td><td><a href='anonfm-20141125-193440-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>3119kb</td></tr>
+<tr><td>2014</td><td>11</td><td>25</td><td>18:30:02</td><td><a href='anonfm-20141125-183002-Смоук.mp3' onclick='showPlayer(this);return false'>Смоук</a></td><td>40045kb</td></tr>
+<tr><td>2014</td><td>11</td><td>25</td><td>02:02:32</td><td><a href='anonfm-20141125-020232-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>41563kb</td></tr>
+<tr><td>2014</td><td>11</td><td>25</td><td>00:09:01</td><td><a href='anonfm-20141125-000901-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>15118kb</td></tr>
+<tr><td>2014</td><td>11</td><td>23</td><td>19:04:19</td><td><a href='anonfm-20141123-190419-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>76539kb</td></tr>
+<tr><td>2014</td><td>11</td><td>23</td><td>13:53:23</td><td><a href='anonfm-20141123-135323-Le Comte de Saint-Germain.mp3' onclick='showPlayer(this);return false'>Le Comte de Saint-Germain</a></td><td>14754kb</td></tr>
+<tr><td>2014</td><td>11</td><td>23</td><td>12:28:24</td><td><a href='anonfm-20141123-122824-Le Comte de Saint-Germain.mp3' onclick='showPlayer(this);return false'>Le Comte de Saint-Germain</a></td><td>78126kb</td></tr>
+<tr><td>2014</td><td>11</td><td>23</td><td>12:24:00</td><td><a href='anonfm-20141123-122400-Le Comte de Saint-Germain.mp3' onclick='showPlayer(this);return false'>Le Comte de Saint-Germain</a></td><td>3324kb</td></tr>
+<tr><td>2014</td><td>11</td><td>23</td><td>11:16:22</td><td><a href='anonfm-20141123-111622-Le Comte de Saint-Germain.mp3' onclick='showPlayer(this);return false'>Le Comte de Saint-Germain</a></td><td>62823kb</td></tr>
+<tr><td>2014</td><td>11</td><td>23</td><td>00:21:04</td><td><a href='anonfm-20141123-002104-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>5472kb</td></tr>
+<tr><td>2014</td><td>11</td><td>22</td><td>17:59:06</td><td><a href='anonfm-20141122-175906-starprom.mp3' onclick='showPlayer(this);return false'>starprom</a></td><td>129991kb</td></tr>
+<tr><td>2014</td><td>11</td><td>22</td><td>00:28:21</td><td><a href='anonfm-20141122-002821-2D Anon.mp3' onclick='showPlayer(this);return false'>2D Anon</a></td><td>94638kb</td></tr>
+<tr><td>2014</td><td>11</td><td>21</td><td>23:59:06</td><td><a href='anonfm-20141121-235906-2D Anon.mp3' onclick='showPlayer(this);return false'>2D Anon</a></td><td>40510kb</td></tr>
+<tr><td>2014</td><td>11</td><td>21</td><td>23:32:05</td><td><a href='anonfm-20141121-233205-2D Anon.mp3' onclick='showPlayer(this);return false'>2D Anon</a></td><td>37111kb</td></tr>
+<tr><td>2014</td><td>11</td><td>21</td><td>22:43:04</td><td><a href='anonfm-20141121-224304-2D Anon.mp3' onclick='showPlayer(this);return false'>2D Anon</a></td><td>0kb</td></tr>
+<tr><td>2014</td><td>11</td><td>20</td><td>22:01:09</td><td><a href='anonfm-20141120-220109-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>9727kb</td></tr>
+<tr><td>2014</td><td>11</td><td>20</td><td>20:02:35</td><td><a href='anonfm-20141120-200235-Смоук.mp3' onclick='showPlayer(this);return false'>Смоук</a></td><td>37752kb</td></tr>
+<tr><td>2014</td><td>11</td><td>20</td><td>00:11:55</td><td><a href='anonfm-20141120-001155-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>32586kb</td></tr>
+<tr><td>2014</td><td>11</td><td>19</td><td>00:03:55</td><td><a href='anonfm-20141119-000355-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>31002kb</td></tr>
+<tr><td>2014</td><td>11</td><td>18</td><td>12:51:29</td><td><a href='anonfm-20141118-125129-Смоук.mp3' onclick='showPlayer(this);return false'>Смоук</a></td><td>13642kb</td></tr>
+<tr><td>2014</td><td>11</td><td>16</td><td>21:15:00</td><td><a href='anonfm-20141116-211500-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>41055kb</td></tr>
+<tr><td>2014</td><td>11</td><td>16</td><td>02:02:52</td><td><a href='anonfm-20141116-020252-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>51038kb</td></tr>
+<tr><td>2014</td><td>11</td><td>16</td><td>00:06:56</td><td><a href='anonfm-20141116-000656-Внучаев.mp3' onclick='showPlayer(this);return false'>Внучаев</a></td><td>163632kb</td></tr>
+<tr><td>2014</td><td>11</td><td>15</td><td>22:08:19</td><td><a href='anonfm-20141115-220819-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>27202kb</td></tr>
+<tr><td>2014</td><td>11</td><td>13</td><td>23:57:28</td><td><a href='anonfm-20141113-235728-Администрация.mp3' onclick='showPlayer(this);return false'>Администрация</a></td><td>1424kb</td></tr>
+<tr><td>2014</td><td>11</td><td>13</td><td>23:34:27</td><td><a href='anonfm-20141113-233427-Администрация.mp3' onclick='showPlayer(this);return false'>Администрация</a></td><td>2717kb</td></tr>
+<tr><td>2014</td><td>11</td><td>13</td><td>22:06:00</td><td><a href='anonfm-20141113-220600-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>15851kb</td></tr>
+<tr><td>2014</td><td>11</td><td>13</td><td>16:24:07</td><td><a href='anonfm-20141113-162407-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>11544kb</td></tr>
+<tr><td>2014</td><td>11</td><td>12</td><td>12:19:20</td><td><a href='anonfm-20141112-121920-Администрация.mp3' onclick='showPlayer(this);return false'>Администрация</a></td><td>2937kb</td></tr>
+<tr><td>2014</td><td>11</td><td>12</td><td>01:00:50</td><td><a href='anonfm-20141112-010050-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>19342kb</td></tr>
+<tr><td>2014</td><td>11</td><td>11</td><td>03:05:32</td><td><a href='anonfm-20141111-030532-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>57kb</td></tr>
+<tr><td>2014</td><td>11</td><td>11</td><td>02:02:07</td><td><a href='anonfm-20141111-020207-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>15299kb</td></tr>
+<tr><td>2014</td><td>11</td><td>10</td><td>19:43:32</td><td><a href='anonfm-20141110-194332-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>8536kb</td></tr>
+<tr><td>2014</td><td>11</td><td>09</td><td>00:24:37</td><td><a href='anonfm-20141109-002437-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>61085kb</td></tr>
+<tr><td>2014</td><td>11</td><td>08</td><td>20:36:02</td><td><a href='anonfm-20141108-203602-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>62201kb</td></tr>
+<tr><td>2014</td><td>11</td><td>08</td><td>02:00:56</td><td><a href='anonfm-20141108-020056-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>7kb</td></tr>
+<tr><td>2014</td><td>11</td><td>07</td><td>22:08:48</td><td><a href='anonfm-20141107-220848-Лемур катта.mp3' onclick='showPlayer(this);return false'>Лемур катта</a></td><td>50410kb</td></tr>
+<tr><td>2014</td><td>11</td><td>07</td><td>21:41:04</td><td><a href='anonfm-20141107-214104-Внучаев.mp3' onclick='showPlayer(this);return false'>Внучаев</a></td><td>19828kb</td></tr>
+<tr><td>2014</td><td>11</td><td>07</td><td>21:40:13</td><td><a href='anonfm-20141107-214013-Внучаев.mp3' onclick='showPlayer(this);return false'>Внучаев</a></td><td>95kb</td></tr>
+<tr><td>2014</td><td>11</td><td>07</td><td>20:05:11</td><td><a href='anonfm-20141107-200511-Внучаев.mp3' onclick='showPlayer(this);return false'>Внучаев</a></td><td>129871kb</td></tr>
+<tr><td>2014</td><td>11</td><td>07</td><td>18:35:32</td><td><a href='anonfm-20141107-183532-Администрация.mp3' onclick='showPlayer(this);return false'>Администрация</a></td><td>1170kb</td></tr>
+<tr><td>2014</td><td>11</td><td>07</td><td>18:25:35</td><td><a href='anonfm-20141107-182535-Администрация.mp3' onclick='showPlayer(this);return false'>Администрация</a></td><td>1076kb</td></tr>
+<tr><td>2014</td><td>11</td><td>06</td><td>21:00:09</td><td><a href='anonfm-20141106-210009-Konrad.mp3' onclick='showPlayer(this);return false'>Konrad</a></td><td>84327kb</td></tr>
+<tr><td>2014</td><td>11</td><td>06</td><td>18:50:53</td><td><a href='anonfm-20141106-185053-Лемур катта.mp3' onclick='showPlayer(this);return false'>Лемур катта</a></td><td>86641kb</td></tr>
+<tr><td>2014</td><td>11</td><td>05</td><td>23:25:58</td><td><a href='anonfm-20141105-232558-Keksigg.mp3' onclick='showPlayer(this);return false'>Keksigg</a></td><td>88431kb</td></tr>
+<tr><td>2014</td><td>11</td><td>05</td><td>20:20:29</td><td><a href='anonfm-20141105-202029-Лемур катта.mp3' onclick='showPlayer(this);return false'>Лемур катта</a></td><td>130165kb</td></tr>
+<tr><td>2014</td><td>11</td><td>05</td><td>01:53:31</td><td><a href='anonfm-20141105-015331-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>36629kb</td></tr>
+<tr><td>2014</td><td>11</td><td>04</td><td>23:07:28</td><td><a href='anonfm-20141104-230728-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>45528kb</td></tr>
+<tr><td>2014</td><td>11</td><td>04</td><td>12:05:54</td><td><a href='anonfm-20141104-120554-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>27993kb</td></tr>
+<tr><td>2014</td><td>11</td><td>02</td><td>20:02:15</td><td><a href='anonfm-20141102-200215-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>36384kb</td></tr>
+<tr><td>2014</td><td>11</td><td>02</td><td>20:00:51</td><td><a href='anonfm-20141102-200051-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>321kb</td></tr>
+<tr><td>2014</td><td>11</td><td>02</td><td>17:23:56</td><td><a href='anonfm-20141102-172356-Администрация.mp3' onclick='showPlayer(this);return false'>Администрация</a></td><td>2030kb</td></tr>
+<tr><td>2014</td><td>11</td><td>02</td><td>16:20:29</td><td><a href='anonfm-20141102-162029-Внучаев.mp3' onclick='showPlayer(this);return false'>Внучаев</a></td><td>88771kb</td></tr>
+<tr><td>2014</td><td>11</td><td>02</td><td>15:52:24</td><td><a href='anonfm-20141102-155224-Внучаев.mp3' onclick='showPlayer(this);return false'>Внучаев</a></td><td>24523kb</td></tr>
+<tr><td>2014</td><td>11</td><td>02</td><td>15:46:36</td><td><a href='anonfm-20141102-154636-Внучаев.mp3' onclick='showPlayer(this);return false'>Внучаев</a></td><td>1038kb</td></tr>
+<tr><td>2014</td><td>11</td><td>02</td><td>01:16:00</td><td><a href='anonfm-20141102-011600-Администрация.mp3' onclick='showPlayer(this);return false'>Администрация</a></td><td>27kb</td></tr>
+<tr><td>2014</td><td>11</td><td>01</td><td>22:16:44</td><td><a href='anonfm-20141101-221644-Администрация.mp3' onclick='showPlayer(this);return false'>Администрация</a></td><td>91496kb</td></tr>
+<tr><td>2014</td><td>11</td><td>01</td><td>21:23:02</td><td><a href='anonfm-20141101-212302-Администрация.mp3' onclick='showPlayer(this);return false'>Администрация</a></td><td>75332kb</td></tr>
+<tr><td>2014</td><td>10</td><td>31</td><td>11:25:44</td><td><a href='anonfm-20141031-112544-Le Comte de Saint-Germain.mp3' onclick='showPlayer(this);return false'>Le Comte de Saint-Germain</a></td><td>74759kb</td></tr>
+<tr><td>2014</td><td>05</td><td>17</td><td>14:14:04</td><td><a href='anonfm-20140517-141404-Алцхемист D.J..mp3' onclick='showPlayer(this);return false'>Алцхемист D.J.</a></td><td>80280kb</td></tr>
+<tr><td>2014</td><td>05</td><td>08</td><td>00:50:45</td><td><a href='anonfm-20140508-005045-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>5258kb</td></tr>
+<tr><td>2014</td><td>05</td><td>08</td><td>00:32:18</td><td><a href='anonfm-20140508-003218-Администрация.aac' onclick='showPlayer(this);return false'>Администрация</a></td><td>4356kb</td></tr>
+<tr><td>2014</td><td>03</td><td>07</td><td>22:46:33</td><td><a href='anonfm-20140307-224633-Администрация.ogg' onclick='showPlayer(this);return false'>Администрация</a></td><td>50455kb</td></tr>
+<tr><td>2014</td><td>02</td><td>02</td><td>15:01:10</td><td><a href='anonfm-20140202-150110-Алцхемист D.J..mp3' onclick='showPlayer(this);return false'>Алцхемист D.J.</a></td><td>5329kb</td></tr>
+<tr><td>2014</td><td>01</td><td>11</td><td>01:04:23</td><td><a href='anonfm-20140111-010423-dj.Trap.mp3' onclick='showPlayer(this);return false'>dj.Trap</a></td><td>205099kb</td></tr>
+<tr><td>2014</td><td>01</td><td>11</td><td>00:02:29</td><td><a href='anonfm-20140111-000229-cheshire.mp3' onclick='showPlayer(this);return false'>cheshire</a></td><td>88566kb</td></tr>
+<tr><td>2015</td><td>2</td><td>1</td><td>0:0:0</td><td><a href='aac' onclick='showPlayer(this);return false'>aac</a></td><td>16kb</td></tr>
+</table></div></td><td valign="top">
+
+<div><h1>Весь эфир без перерывов</h1>
+Полные записи эфира, с джинглами и разрывами, с почасовой разбивкой<br>
+<font color="red">Качество ниже чем в оригинальных записях</font><br>
+Позязя, не забывайте СХОРОНЯТ, срок хранения 3 дня. Удоление автоматическое.
+<table><tr>
+<td valign="top"><h1>main</h1><table>
+<tr><th>Дата/время/имя файла</th><th>Размер</th></tr>
+</table></div></td><td valign="top"><h1>low</h1><table>
+<tr><th>Дата/время/имя файла</th><th>Размер</th></tr>
+</table></div></td><td valign="top"><h1>aac</h1><table>
+<tr><th>Дата/время/имя файла</th><th>Размер</th></tr>
+</table></div></td>
+</table></div></td></tr></table>
+
+
+
+<div><h1>Избранные эфиры</h1>
+Эти эфиры редки и схороняются нами отдельно чуть дольше<br>
+Позязя, не забывайте СХОРОНЯТ.
+<table>
+<tr><th>Дата/время/имя файла</th><th>Размер</th></tr>
+</table></div>
+<div><h1>Записи с конкурса новогодних паст</h1>
+<table>
+<tr><th>Имя файла</th><th>Размер</th></tr>
+<tr><td><a href='newyear-pasta/2.ogg'>2.ogg</a></td><td>1643kb</td></tr>
+<tr><td><a href='newyear-pasta/Pasta from JustTheGuy.mp3'>Pasta from JustTheGuy.mp3</a></td><td>9846kb</td></tr>
+<tr><td><a href='newyear-pasta/Pasta_Sutkin1 sup31.mp3'>Pasta_Sutkin1 sup31.mp3</a></td><td>8523kb</td></tr>
+<tr><td><a href='newyear-pasta/ahaha.ogg'>ahaha.ogg</a></td><td>441kb</td></tr>
+<tr><td><a href='newyear-pasta/dlyaradioanonothuila.mp3'>dlyaradioanonothuila.mp3</a></td><td>1350kb</td></tr>
+<tr><td><a href='newyear-pasta/done.mp3'>done.mp3</a></td><td>11143kb</td></tr>
+<tr><td><a href='newyear-pasta/edit1.mp3'>edit1.mp3</a></td><td>1694kb</td></tr>
+<tr><td><a href='newyear-pasta/final.mp3'>final.mp3</a></td><td>7845kb</td></tr>
+<tr><td><a href='newyear-pasta/finish.ogg'>finish.ogg</a></td><td>1182kb</td></tr>
+<tr><td><a href='newyear-pasta/first.ogg'>first.ogg</a></td><td>1264kb</td></tr>
+<tr><td><a href='newyear-pasta/newyear-pasta-awards-eurekafag.mp3'>newyear-pasta-awards-eurekafag.mp3</a></td><td>49429kb</td></tr>
+<tr><td><a href='newyear-pasta/novogodnie_shaslichki.mp3'>novogodnie_shaslichki.mp3</a></td><td>1821kb</td></tr>
+<tr><td><a href='newyear-pasta/out-1325351812-14308.mp3'>out-1325351812-14308.mp3</a></td><td>13624kb</td></tr>
+<tr><td><a href='newyear-pasta/paste.mp3'>paste.mp3</a></td><td>6855kb</td></tr>
+<tr><td><a href='newyear-pasta/paste.ogg'>paste.ogg</a></td><td>3514kb</td></tr>
+<tr><td><a href='newyear-pasta/ra-k.ogg'>ra-k.ogg</a></td><td>465kb</td></tr>
+<tr><td><a href='newyear-pasta/radio_anon.mp3'>radio_anon.mp3</a></td><td>5331kb</td></tr>
+<tr><td><a href='newyear-pasta/radio_anon_2.mp3'>radio_anon_2.mp3</a></td><td>9461kb</td></tr>
+<tr><td><a href='newyear-pasta/sancho.mp3'>sancho.mp3</a></td><td>2712kb</td></tr>
+<tr><td><a href='newyear-pasta/кококок.ogg'>кококок.ogg</a></td><td>1008kb</td></tr>
+<tr><td><a href='newyear-pasta/конкурс копипасты.mp3'>конкурс копипасты.mp3</a></td><td>15331kb</td></tr>
+</table></div>
+<div><h1>Всякая всячина</h1>
+<table>
+<tr><th>Имя файла</th><th>Размер</th></tr>
+<tr><td><a href='stuff/anya1.aac'>anya1.aac</a></td><td>11868kb</td></tr>
+<tr><td><a href='stuff/anya3.aac'>anya3.aac</a></td><td>3956kb</td></tr>
+<tr><td><a href='stuff/anya4.aac'>anya4.aac</a></td><td>5280kb</td></tr>
+<tr><td><a href='stuff/test.1.mp3'>test.1.mp3</a></td><td>579kb</td></tr>
+<tr><td><a href='stuff/test.2.mp3'>test.2.mp3</a></td><td>2122kb</td></tr>
+<tr><td><a href='stuff/test.3.mp3'>test.3.mp3</a></td><td>8590kb</td></tr>
+<tr><td><a href='stuff/test.4.mp3'>test.4.mp3</a></td><td>1722kb</td></tr>
+<tr><td><a href='stuff/test.5.mp3'>test.5.mp3</a></td><td>6908kb</td></tr>
+<tr><td><a href='stuff/test.mp3'>test.mp3</a></td><td>3488kb</td></tr>
+<tr><td><a href='stuff/till.mp3'>till.mp3</a></td><td>49032kb</td></tr>
+</table></div>
+
+Для скачивания используйте правый клик в браузере. Качайте браузером, качалки не нужны. Не забывайте качать вин, ибо записи живут только неделю.<br><br>
+
+
+Это костыльная версия, запилена по просьбе анона bnaeanrece1c, который оставил следующие посты:<br>
+
+Администрация: устрой кодинг в прямом эфире и добавь флеш плеер на страницу записей эфиров. вот простой плеер с обяснялкой как это сделать http://www.macloo.com/examples/audio_player/<br>
+Администрация: сделай хотя бы это. там на 20-ть минут работы. а уж потом прокрастинируй и быдлокодь свой плеер с блекджеком и шлюхами.<br>
+
+<div style="color:red">13 августа, починил некоторые "удаленные" записи, которые на самом деле никто не удалял, просто они в формате AAC+, а флешовое говно их не умеет играть и плеер ошибочно писал "не найдено". Спасибо анону sepnsnpuec61, который прислал скриншот с проблемой. Расширения файлов починены, проигрывание таких файлов отключено, сервер на будущее пропатчен. Было дохуя срачей, но все решилось за 2 дня, сразу как прислали скриншот.</div>
+
+</body></html>
+
