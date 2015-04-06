@@ -109,7 +109,7 @@ When run this script with B<--scan> option all sources will be scanned,
 and "files" collection will contain objects:
 
 	"_id" : ObjectId("5522448aafad4263e2b90bab"),
-	"addedAt" : NumberLong(1428309130),
+	"addedAt" : ISODate("2015-01-04T19:10:00Z"),
 	"dj" : "unkown",
 	"name" : "1346188814.mp3",
 	"size" : null,
@@ -119,7 +119,7 @@ and "files" collection will contain objects:
 			"id" : "55224342afad4263e2b90b96"
 		}
 	],
-	"timestamp" : "1346188814"
+	"timestamp" :  ISODate("2015-01-04T19:10:00Z")
 
 After B<--mkprev>:
 
@@ -139,7 +139,7 @@ After B<--mkprev>:
 			"id" : "55224342afad4263e2b90b96"
 		}
 	],
-	"timestamp" : "1346082313"
+	"timestamp" : ISODate("2015-01-04T19:10:00Z")
 
 Example of schedules's record:
 
@@ -147,8 +147,8 @@ Example of schedules's record:
 	"dj" : "Внучаев",
 	"desc" : "Возможно будет прямое включение и рабочие моменты",
 	"duration" : NumberLong(3600),
-	"addedAt" : NumberLong(1428323821),
-	"t" : "1342976400"
+	"addedAt" : ISODate("2015-01-04T19:10:00Z"),
+	"t" : ISODate("2012-01-04T19:10:00Z")
 
 Additional fields: B<rm> - boolean - removed or not
 =head1 AUTHOR
@@ -167,6 +167,7 @@ use feature "state";
 use Getopt::Long;
 use Pod::Usage;
 use MongoDB;
+use DateTime;
 use boolean;
 use Config::Any::YAML;
 use Path::Tiny;
@@ -234,12 +235,14 @@ if ( $config->{mongodb} =~ m|mongodb://(.*?):(.*?)@(.*?):(.*?)/(.*)| ) {
         host     => "$3:$4",
         db_name  => $5,
     );
+    $client->dt_type('DateTime');
     $db = $client->get_database($5);
 } elsif ( $config->{mongodb} =~ m|mongodb://(.*?):(.*?)/(.*)| ) {
   my $client = MongoDB::MongoClient->new(
       host    => "$1:$2",
       db_name => $3,
   );
+  $client->dt_type('DateTime');
   $db = $client->get_database($3);
 }
 
@@ -351,7 +354,7 @@ if ($SCAN) {
             print "!! Unknown source type, skip.\n";
         } # /if
 
-        my $now = time();
+        my $now = DateTime->now();
         foreach (@result) {
             my $filename = $_->{filename};
             my $size     = $_->{size};
@@ -387,7 +390,7 @@ if ($SCAN) {
                     name      => $filename,
                     addedAt   => $now,
                     dj        => $dj,
-                    timestamp => $timestamp,
+                    timestamp => DateTime->from_epoch( epoch => $timestamp ),
                     size      => $size
                 };
                 print "  New file: $filename\n";
@@ -427,9 +430,10 @@ if ($SCHEDULE) {
     my %stored_schedules;       #  scheduled by timestamps
 
     foreach
-      my $s ( $col_schedules->find()->fields( { timestamp => 1 } )->all() )
+      my $s ( $col_schedules->find()->fields( { t => 1 } )->all() )
     {
-        $stored_schedules{ $s->{timestamp} } = $s;
+        my $time = $s->{t}->epoch();
+        $stored_schedules{$time} = $s;
     }
 
     my $page = fetch_page( $config->{schedule} );
@@ -438,7 +442,7 @@ if ($SCHEDULE) {
     my %schedules;
     AnonFM::Util::parseSchedules( \%schedules, $page );
 
-    my $now = time();
+    my $now = DateTime->now();
     while ( my ( $time, $data ) = each %schedules ) {
         if ( exists $stored_schedules{$time} ) {
             next;
@@ -447,7 +451,7 @@ if ($SCHEDULE) {
         # add new schedule
         $col_schedules->insert(
             {
-                t        => $time,
+                t        => DateTime->from_epoch( epoch => $time ),
                 addedAt  => $now,
                 dj       => $data->{dj},
                 desc     => $data->{desc},
