@@ -48,11 +48,88 @@ Scan sources for files, update db.
 
 =item B<--mkprev>
 
-Scan sources for files, update db.
+Download files from sources and make audio preview, update db.
 
 =back
 
 =cut
+
+=head1 BASIC USAGE
+
+Example of usage:
+
+Add source,for example Nikita's Googledrive (https://docs.google.com/folder/d/0B6HMhe4i6iXGNWFpQXlIckNGeE0/edit)
+
+    % ./anonfm-fl-update.pl -con ./anonfm-fl.yaml --add 0B6HMhe4i6iXGNWFpQXlIckNGeE0
+
+Scan source for files
+
+    % ./anonfm-fl-update.pl -con ./anonfm-fl.yaml --scan
+
+Download and make preview.
+
+    % ./anonfm-fl-update.pl -con ./anonfm-fl.yaml --mk
+
+=head1 CONFIGURATION FILE
+
+
+    mongodb: mongodb://localhost:27017/anonfm
+        
+    #
+    # Preview generator
+    #
+
+    # Try get files here before downloading
+    cache:
+      - /home/anon/tmp/cache1/
+      - /home/anon/tmp/cache2/
+    
+    # Location where to download files
+    download_dir: /home/anon/tmp/download/
+    
+    preview_dir: /home/anon/tmp/preview/
+
+    # optional, set ffmpeg setting
+    ffmpeg_cmd: -acodec libfdk_aac -profile:a aac_he -ab 12k -ac 2 -ar 22050
+    ffmpeg: /usr/local/bin/ffmpeg
+
+=head1 MongoDB schema
+
+When run this script with B<--scan> option all sources will be scanned,
+and "files" collection will contain objects:
+
+	"_id" : ObjectId("5522448aafad4263e2b90bab"),
+	"addedAt" : NumberLong(1428309130),
+	"dj" : "unkown",
+	"name" : "1346188814.mp3",
+	"size" : null,
+	"sources" : [
+		{
+			"url" : "https://googledrive.com/host/0B6HMhe4i6iXGdDFqQjdKQnEwMFU",
+			"id" : "55224342afad4263e2b90b96"
+		}
+	],
+	"timestamp" : "1346188814"
+
+After B<--mkprev>:
+
+	"_id" : ObjectId("5522448aafad4263e2b90b97"),
+
+	"bitrate" : "192",
+	"duration" : NumberLong(663),
+	"hasPreview" : true,
+
+	"addedAt" : NumberLong(1428309130),
+	"dj" : "unkown",
+	"name" : "1346082313.mp3",
+	"size" : NumberLong(15930848),
+	"sources" : [
+		{
+			"url" : "https://googledrive.com/host/0B6HMhe4i6iXGRjhqenE3X1RNdFk",
+			"id" : "55224342afad4263e2b90b96"
+		}
+	],
+	"timestamp" : "1346082313"
 
 =head1 AUTHOR
 

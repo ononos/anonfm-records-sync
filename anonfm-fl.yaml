@@ -1,15 +1,12 @@
 mongodb: mongodb://localhost:27017/anonfm
 
-cache:
-  - /home/anon/tmp/cache1/
-  - /home/anon/tmp/cache2/
-
 #
 # Preview generator
 #
 
-# comment this if want remove downloaded files
-keep_downloaded: 1
+cache:
+  - /home/anon/tmp/cache1/
+  - /home/anon/tmp/cache2/
 
 # Location where to download files
 download_dir: /home/anon/tmp/download/
