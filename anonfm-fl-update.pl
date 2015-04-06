@@ -442,6 +442,7 @@ if ($MAKE_PREV) {
                 next if ($_->{rm} // 0);
 
                 my $id  = $_->{id};
+                # source may have url (google drive)
                 my $url = $_->{url} // $sourcesById{$id}->{url} . $filename;
 
                 print $url . "\n";
