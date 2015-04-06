@@ -46,6 +46,10 @@ List sources.
 
 Scan sources for files, update db.
 
+=item B<--schedule>
+
+Download schedule page, update db.
+
 =item B<--mkprev>
 
 Download files from sources and make audio preview, update db.
@@ -66,6 +70,10 @@ Scan source for files
 
     % ./anonfm-fl-update.pl -con ./anonfm-fl.yaml --scan
 
+Update schedule from anon.fm, see config file for more.
+
+    % ./anonfm-fl-update.pl -con ./anonfm-fl.yaml --sch
+
 Download and make preview.
 
     % ./anonfm-fl-update.pl -con ./anonfm-fl.yaml --mk
@@ -74,7 +82,9 @@ Download and make preview.
 
 
     mongodb: mongodb://localhost:27017/anonfm
-        
+    
+    schedule: http://anon.fm/shed-all.html
+    
     #
     # Preview generator
     #
@@ -131,6 +141,16 @@ After B<--mkprev>:
 	],
 	"timestamp" : "1346082313"
 
+Example of schedules's record:
+
+	"_id" : ObjectId("55227ded26b316275a1e3d00"),
+	"dj" : "Внучаев",
+	"desc" : "Возможно будет прямое включение и рабочие моменты",
+	"duration" : NumberLong(3600),
+	"addedAt" : NumberLong(1428323821),
+	"t" : "1342976400"
+
+Additional fields: B<rm> - boolean - removed or not
 =head1 AUTHOR
 
 
@@ -172,6 +192,7 @@ my $HELP = 0;
 my $MANUAL = 0;
 
 my $SCAN = 0;
+my $SCHEDULE = 0;
 my $MAKE_PREV = 0;
 
 my $MONGO_URL;
@@ -189,6 +210,7 @@ GetOptions(
     "remove=s"  => \@RM_SRC,
     "list"      => \$LIST,
     "scan"      => \$SCAN,
+    "schedule"  => \$SCHEDULE,
     "mkprev"    => \$MAKE_PREV,
     "config=s"  => \$CONFIG_FILE,
 );
@@ -201,7 +223,7 @@ my $config = Config::Any::YAML->load ($CONFIG_FILE);
 
 my $db;
 
-foreach (qw/mongodb cache download_dir preview_dir/) {
+foreach (qw/mongodb cache download_dir preview_dir schedule/) {
     die "Config file have no \"$_\" key\n" unless exists $config->{$_};
 }
 
@@ -225,6 +247,7 @@ die "Can't connect to mongodb: $MONGO_URL" unless defined $db;
 
 my $col_source = $db->get_collection('sources');
 my $col_files = $db->get_collection('files');
+my $col_schedules = $db->get_collection('schedules');
 
 # --add
 foreach my $item (@ADD_SRC) {
@@ -398,6 +421,42 @@ if ($SCAN) {
         }
     }
 } # / SCAN
+
+if ($SCHEDULE) {
+
+    my %stored_schedules;       #  scheduled by timestamps
+
+    foreach
+      my $s ( $col_schedules->find()->fields( { timestamp => 1 } )->all() )
+    {
+        $stored_schedules{ $s->{timestamp} } = $s;
+    }
+
+    my $page = fetch_page( $config->{schedule} );
+    die unless defined $page;
+
+    my %schedules;
+    AnonFM::Util::parseSchedules( \%schedules, $page );
+
+    my $now = time();
+    while ( my ( $time, $data ) = each %schedules ) {
+        if ( exists $stored_schedules{$time} ) {
+            next;
+        }
+
+        # add new schedule
+        $col_schedules->insert(
+            {
+                t        => $time,
+                addedAt  => $now,
+                dj       => $data->{dj},
+                desc     => $data->{desc},
+                duration => $data->{duration}
+            }
+        );
+    }
+
+} # / SCHEDULE
 
 if ($MAKE_PREV) {
     print "Start build preview\n";

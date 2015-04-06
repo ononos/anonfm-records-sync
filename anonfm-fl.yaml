@@ -1,5 +1,7 @@
 mongodb: mongodb://localhost:27017/anonfm
 
+schedule: http://anon.fm/shed-all.html
+
 #
 # Preview generator
 #
