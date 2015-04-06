@@ -1,7 +1,7 @@
 #!/usr/bin/perl -Iblib/lib -Iblib/arch -I../blib/lib -I../blib/arch
 #
 use utf8;
-use Test::More tests => 5;
+use Test::More tests => 6;
 BEGIN { use_ok( AnonFM::Util ); }
 
 use POSIX 'strftime';
@@ -59,4 +59,15 @@ subtest "Google Drive parse page" => sub {
     is ( $data->{files}[0]{filename}, '1346082313.mp3', "First file name");
     is ( $data->{files}[0]{id}, '0B6HMhe4i6iXGRjhqenE3X1RNdFk', "Google Id of first file");
 
-}
+};
+
+subtest "Nginx index page" => sub {
+    my $nginx_src = path("t/fixture/nginx_index.html")->slurp_utf8();
+
+    my @files = AnonFM::Util::parseNginxIndex($nginx_src);
+
+    is( @files, 1, 'Number of files in nginx index page' );
+    is( $files[0]{filename}, 'infa.txt', 'File name of first file' );
+    is( $files[0]{size},     27022,      "Size of first record (27022)" );
+
+};

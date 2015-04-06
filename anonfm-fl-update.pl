@@ -318,6 +318,11 @@ if ($SCAN) {
             {
                 @result = AnonFM::Util::parseAnonFMrecords($page);
             }
+
+            # nginx?
+            elsif ( $page =~ m|<body bgcolor="white">| ) {
+                @result = AnonFM::Util::parseNginxIndex($page);
+            }
         }
         else {
             print "!! Unknown source type, skip.\n";
@@ -496,17 +501,20 @@ sub fetch_page {
 
     my $tx = $ua->get($url);
     my $page;
+
     # get page
     if ( my $res = $tx->success ) {
         $page = $res->body;
         utf8::decode($page);
-    } else {
+    }
+    else {
         my ( $err, $code ) = $tx->error;
         print "Error download $url\n";
         print Dumper \$err;
     }
     return $page;
 }
+
 
 # download url and save
 sub download {
@@ -537,6 +545,7 @@ sub download {
         return 0;
     }
 }
+
 
 # recursive traverse google drive pages, get array [{filename => .., url => ..}, ..]
 sub recursiveGoogle {

@@ -181,7 +181,42 @@ sub parseApacheIndex {
     my @files;
 
     if ($source =~m|<tr><td valign="top"><img.*?</td><td>&nbsp;</td></tr>|) {
-        while ($source =~ m|<td><a href=".*?">([^/].*?)</a></td><td align="right">.*?</td><td align="right">(.*?)</td>|g) {
+        while ($source =~ m|<td><a href=".*?">([^/].*?[^/])</a></td><td align="right">.*?</td><td align="right">(.*?)</td>|g) {
+            my ($filename, $size) = ($1, $2);
+
+             # parse size
+            if ( $size =~ /(\d+)K/ ) {
+                $size = $1 * 1024;
+            }
+            elsif ( $size =~ /(\d+)M/ ) {
+                $size = $1 * 1024 * 1024;
+            }
+            elsif ( $size =~ /(\d+)G/ ) {
+                $size = $1 * 1024 * 1024 * 1024;
+            }
+            else {
+                $size = int($size);
+            }
+            push( @files, { filename => $filename, size => $size } );
+       }
+    }
+    return @files;
+}
+
+=head2 parseNginxIndex($htmlpage)
+
+Parse nginx index page and return filenames and size
+
+Return array of {filename => '..', size => '..'}
+
+=cut
+
+sub parseNginxIndex {
+    my $source = shift;
+    my @files;
+
+    if ($source =~m|<body bgcolor="white">|) {
+        while ($source =~ m|<a href=".*?">([^/].*?[^/])</a>\s+.*?\d\d:\d\d\s+(\d+)|g) {
             my ($filename, $size) = ($1, $2);
 
              # parse size
