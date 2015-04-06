@@ -509,7 +509,7 @@ sub fetch_page {
     }
     else {
         my ( $err, $code ) = $tx->error;
-        print "Error download $url\n";
+        print "Error fetching \"$url\"\n";
         print Dumper \$err;
     }
     return $page;
@@ -540,7 +540,7 @@ sub download {
     }
     else {
         my ( $err, $code ) = $tx->error;
-        print "Error download\n";
+        print "Error download \"$url\"\n";
         print Dumper \$err;
         return 0;
     }
