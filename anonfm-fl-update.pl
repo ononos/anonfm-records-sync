@@ -112,7 +112,7 @@ and "files" collection will contain objects:
 	"_id" : ObjectId("5522448aafad4263e2b90bab"),
 	"addedAt" : ISODate("2015-01-04T19:10:00Z"),
 	"dj" : "unkown",
-	"name" : "1346188814.mp3",
+	"fname" : "1346188814.mp3",
 	"size" : null,
 	"sources" : [
 		{
@@ -132,7 +132,7 @@ After B<--mkprev>:
 
 	"addedAt" : NumberLong(1428309130),
 	"dj" : "unkown",
-	"name" : "1346082313.mp3",
+	"fname" : "1346082313.mp3",
 	"size" : NumberLong(15930848),
 	"sources" : [
 		{
@@ -306,7 +306,7 @@ if ($SCAN) {
     my @a = $col_source->find( { rm => { '$ne' => boolean::true } } )->all();
 
     # fetch all files from mongodb, and  convert to hash, where key is
-    # "name" field of record
+    # "fname" field of record
     my %stored_files;
 
     # sources that was skipped;
@@ -315,9 +315,9 @@ if ($SCAN) {
 
     foreach
       my $f ( $col_files->find( { isSch => { '$ne' => boolean::true } } )
-        ->fields( { name => 1, sources => 1 } )->all() )
+        ->fields( { fname => 1, sources => 1 } )->all() )
     {
-        $stored_files{ $f->{name} } = $f;
+        $stored_files{ $f->{fname} } = $f;
     }
 
     # Hash of filenames->sources that alive.
@@ -433,7 +433,7 @@ if ($SCAN) {
             # if not event exist record, add to modifier $set name and size
             if ( !exists $stored_files{ $_->{filename} } ) {
                 my $doc = {
-                    name    => $filename,
+                    fname    => $filename,
                     addedAt => $now,
                     dj      => $dj,
                     t       => DateTime->from_epoch( epoch => $timestamp ),
@@ -446,7 +446,7 @@ if ($SCAN) {
             } else {
                 print "  Update source for: $filename\n";
                 # update collection
-                $col_files->update({name => $filename}, { '$addToSet' => { sources => $sourceObj } });
+                $col_files->update({fname => $filename}, { '$addToSet' => { sources => $sourceObj } });
             }
 
             # mark this source as seen
@@ -550,11 +550,11 @@ if ($MAKE_PREV) {
                 { rm         => { '$ne' => boolean::true } }
             ]
         }
-    )->fields( { name => 1, sources => 1 } )->all();
+    )->fields( { fname => 1, sources => 1 } )->all();
 
     foreach (@a) {
 
-        my $filename = $_->{name};
+        my $filename = $_->{fname};
         my $file_sources = $_->{sources};
         my $previewName = $_->{_id};
         my $fileId = $_->{_id};
