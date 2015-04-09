@@ -120,7 +120,7 @@ and "files" collection will contain objects:
 			"id" : "55224342afad4263e2b90b96"
 		}
 	],
-	"timestamp" :  ISODate("2015-01-04T19:10:00Z")
+	"t" :  ISODate("2015-01-04T19:10:00Z")
 
 After B<--mkprev>:
 
@@ -140,7 +140,7 @@ After B<--mkprev>:
 			"id" : "55224342afad4263e2b90b96"
 		}
 	],
-	"timestamp" : ISODate("2015-01-04T19:10:00Z")
+	"t" : ISODate("2015-01-04T19:10:00Z")
 
 Example of schedules's record:
 
@@ -432,12 +432,12 @@ if ($SCAN) {
             # if not event exist record, add to modifier $set name and size
             if ( !exists $stored_files{ $_->{filename} } ) {
                 my $doc = {
-                    name      => $filename,
-                    addedAt   => $now,
-                    dj        => $dj,
-                    timestamp => DateTime->from_epoch( epoch => $timestamp ),
-                    size      => $size,
-                    sources   => [$sourceObj]
+                    name    => $filename,
+                    addedAt => $now,
+                    dj      => $dj,
+                    t       => DateTime->from_epoch( epoch => $timestamp ),
+                    size    => $size,
+                    sources => [$sourceObj]
                 };
 
                 print "  New file: $filename\n";
