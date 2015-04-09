@@ -429,26 +429,24 @@ if ($SCAN) {
                 $sourceObj->{url} = $url;
             }
 
-            # modifier for mongo
-            my $modifier = { '$addToSet' => { sources => $sourceObj } };
-
-
             # if not event exist record, add to modifier $set name and size
             if ( !exists $stored_files{ $_->{filename} } ) {
-                $modifier->{'$set'} = {
+                my $doc = {
                     name      => $filename,
                     addedAt   => $now,
                     dj        => $dj,
                     timestamp => DateTime->from_epoch( epoch => $timestamp ),
-                    size      => $size
+                    size      => $size,
+                    sources   => [$sourceObj]
                 };
+
                 print "  New file: $filename\n";
+                $col_files->insert($doc);
             } else {
                 print "  Update source for: $filename\n";
+                # update collection
+                $col_files->update({name => $filename}, { '$addToSet' => { sources => $sourceObj } });
             }
-
-            # update collection
-            $col_files->update({name => $filename}, $modifier, {upsert => 1});
 
             # mark this source as seen
             $confirm_sources { $filename }{$sourceId} = 1;
