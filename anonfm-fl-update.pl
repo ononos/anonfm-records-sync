@@ -152,6 +152,7 @@ Example of schedules's record:
 	"t" : ISODate("2012-01-04T19:10:00Z")
 
 Additional fields: B<rm> - boolean - removed or not
+
 =head1 AUTHOR
 
 
@@ -253,7 +254,6 @@ die "Can't connect to mongodb: $MONGO_URL" unless defined $db;
 
 my $col_source = $db->get_collection('sources');
 my $col_files = $db->get_collection('files');
-my $col_schedules = $db->get_collection('schedules');
 
 # --add
 foreach (@ADD_SRC) {
@@ -314,7 +314,8 @@ if ($SCAN) {
     
 
     foreach
-      my $f ( $col_files->find()->fields( { name => 1, sources => 1 } )->all() )
+      my $f ( $col_files->find( { isSch => { '$ne' => boolean::true } } )
+        ->fields( { name => 1, sources => 1 } )->all() )
     {
         $stored_files{ $f->{name} } = $f;
     }
@@ -495,8 +496,9 @@ if ($SCHEDULE) {
 
     my %stored_schedules;       #  scheduled by timestamps
 
-    foreach
-      my $s ( $col_schedules->find()->fields( { t => 1 } )->all() )
+    foreach my $s (
+        $col_files->find( { isSch => boolean::true } )->fields( { t => 1 } )
+        ->all() )
     {
         my $time = $s->{t}->epoch();
         $stored_schedules{$time} = $s;
@@ -515,8 +517,9 @@ if ($SCHEDULE) {
         }
 
         # add new schedule
-        $col_schedules->insert(
+        $col_files->insert(
             {
+                isSch    => boolean::true,
                 t        => DateTime->from_epoch( epoch => $time ),
                 addedAt  => $now,
                 dj       => $data->{dj},
@@ -542,6 +545,7 @@ if ($MAKE_PREV) {
     my @a = $col_files->find(
         {
             '$and' => [
+                { isSch      => { '$ne' => boolean::true } },
                 { hasPreview => { '$ne' => boolean::true } },
                 { rm         => { '$ne' => boolean::true } }
             ]
@@ -625,7 +629,7 @@ if ($MAKE_PREV) {
 
 sub fetch_page {
     my $url = shift;
-    state $ua = Mojo::UserAgent->new( max_redirects => 5 );
+    my $ua = Mojo::UserAgent->new( max_redirects => 5 );
     $ua->transactor->name('Mozilla/5.0');
 
     my $tx = $ua->get($url);
