@@ -336,13 +336,13 @@ if ($SCAN) {
 
     foreach my $src (@a) {
         my $source = $src->{url};
-        my $sourceId = $src->{_id}->value;
+        my $sourceId = $src->{_id};
 
         sub update_source_msg {    # helper
             my $msg = shift;
             $col_source->update(
                 {
-                    _id => MongoDB::OID->new( "value" => $sourceId )
+                    _id => $sourceId
                 },
                 {
                     '$set' => { msg => $msg }
@@ -355,7 +355,7 @@ if ($SCAN) {
         if ( !$FORCE && defined $lastUpdated ) {
             my $update = $src->{update};
             unless ( time() > $update + $lastUpdated->epoch() ) {
-                push @skipped_sources, $sourceId;
+                push @skipped_sources, $sourceId->value;
                 print "Skip source $source\n";
                 next;
             }
@@ -373,7 +373,7 @@ if ($SCAN) {
             if ($@) {
                 print Dumper $src;
                 update_source_msg $@;
-                push @skipped_sources, $sourceId;
+                push @skipped_sources, $sourceId->value;
                 next;
             }
         }
@@ -382,7 +382,7 @@ if ($SCAN) {
 
             unless (defined $page) {
                 update_source_msg 'Failure download page';
-                push @skipped_sources, $sourceId;
+                push @skipped_sources, $sourceId->value;
                 next;
             }
 
@@ -429,7 +429,7 @@ if ($SCAN) {
             if ( exists $stored_files{$filename}
                      && grep { $_->{id} eq $sourceId } @{$stored_files{$filename}{'sources'}} ) {
                 # mark this source as seen and next
-                $confirm_sources{ $filename }{$sourceId} = 1;
+                $confirm_sources{ $filename }{$sourceId->value} = 1;
                 next;
             }
 
@@ -458,7 +458,7 @@ if ($SCAN) {
             }
 
             # mark this source as seen
-            $confirm_sources { $filename }{$sourceId} = 1;
+            $confirm_sources { $filename }{$sourceId->value} = 1;
         }
 
     }
@@ -469,9 +469,9 @@ if ($SCAN) {
         foreach my $source ( @{ $stored_files{$filename}{'sources'} } ) {
             my $sourceId = $source->{id};
 
-            next if ( $sourceId ~~ @skipped_sources );
+            next if ( $sourceId->value ~~ @skipped_sources );
 
-            if ( exists $confirm_sources{$filename}{$sourceId} ) {
+            if ( exists $confirm_sources{$filename}{$sourceId->value} ) {
                 if ( $source->{rm} // 0 ) {
                     # looks this file now present in source, remove "rm" field
                     $col_files->update(
