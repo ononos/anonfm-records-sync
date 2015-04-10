@@ -30,9 +30,9 @@ Read the manual.
 
 Local config file, store cache, preview
 
-=item B<--add source,duration>
+=item B<--add source,duration,title>
 
-Add source url, google drive id and B<duration> for next update.
+Add source url, google drive id and B<duration> for next update. B<title> is short source describe title
 
 =item B<--rm source>
 
@@ -260,28 +260,31 @@ my $col_source = $db->get_collection('sources');
 my $col_files = $db->get_collection('files');
 
 # --add
-foreach (@ADD_SRC) {
-    my $url            = $_;
-    my $updateDuration = 259200;
-    if (m/(.*?),(.*)/) {
-        $url            = $1;
-        $updateDuration = $2;
-    }
+foreach my $source (@ADD_SRC) {
+    die "Format of source is \"URL,DURATION,TITLE\". Fail to add $source"
+      unless ( $source =~ m/(.*?),(.*?),(.*)/ );
+
+    my ( $url, $updateDuration, $title ) = ( $1, $2, $3 );
+
     if (
         $col_source->update(
-            { url => $url },
             {
-                '$set'   => { url => $url, update => $updateDuration },
-                '$unset' => { rm  => "" }
+                url => $url
             },
-            { upsert => 1 }
+            {
+                '$set' =>
+                  { url => $url, update => $updateDuration, title => $title },
+                '$unset' => { rm => "" }
+            },
+            {
+                upsert => 1
+            }
         )->{n}
       )
     {
-        print "added source: $url\n";
+        print "added/updated source: $url\n";
         $LIST = 1;
     }
-
 }
 
 # --remove
@@ -299,7 +302,8 @@ if ($LIST) {
     my @a = $col_source->find()->all();
     my $indent = "     ";
     foreach (@a) {
-        printf "%-8s %-10s %s\n", $_->{rm} ? 'removed' : '', $_->{update}, $_->{url},;
+        printf "%-8s %-10s %-12s %s\n", $_->{rm} ? 'removed' : '',
+          $_->{update}, $_->{title}, $_->{url},;
     }
 }
 
