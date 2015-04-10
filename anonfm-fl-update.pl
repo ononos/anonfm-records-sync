@@ -721,7 +721,7 @@ sub recursiveGoogle {
         push @result,
           {
             filename => $_->{filename},
-            url      => "https://googledrive.com/host/" . $_->{id}
+            url      => "https://googledrive.com/host/" . $id . '/' . $_->{filename}
           };
     }
 
