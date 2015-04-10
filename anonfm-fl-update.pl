@@ -144,12 +144,16 @@ After B<--mkprev>:
 
 Example of schedules's record:
 
-	"_id" : ObjectId("55227ded26b316275a1e3d00"),
-	"dj" : "Внучаев",
-	"desc" : "Возможно будет прямое включение и рабочие моменты",
-	"duration" : NumberLong(3600),
-	"addedAt" : ISODate("2015-01-04T19:10:00Z"),
-	"t" : ISODate("2012-01-04T19:10:00Z")
+	"_id" : ObjectId("5527883026b31612ff0b08b6"),
+	"dj" : "Никита Ветров",
+	"isSch" : true,
+	"duration" : NumberLong(3420),
+	"addedAt" : ISODate("2015-04-10T08:22:08Z"),
+	"schedule" : "Никита читает новости об МММ",
+                                               # forward timestamp - 15 minutes (t - used for sorting,
+                                               # need schedule move before record start, som djs start recording faster)
+	"t" : ISODate("2012-05-05T14:03:00Z")
+	"schTime" : ISODate("2012-05-05T13:48:00Z"), # REAL TIME STAMP
 
 Additional fields: B<rm> - boolean - removed or not
 
@@ -520,10 +524,11 @@ if ($SCHEDULE) {
         $col_files->insert(
             {
                 isSch    => boolean::true,
+                schTime  => DateTime->from_epoch( epoch => $time - 15 * 60 ),
                 t        => DateTime->from_epoch( epoch => $time ),
                 addedAt  => $now,
                 dj       => $data->{dj},
-                desc     => $data->{desc},
+                schedule => $data->{desc},
                 duration => $data->{duration}
             }
         );
