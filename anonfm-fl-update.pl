@@ -439,7 +439,7 @@ if ($SCAN) {
             }
 
             # if not event exist record, add to modifier $set name and size
-            if ( !exists $stored_files{ $_->{filename} } ) {
+            if ( !exists $stored_files{ $filename } ) {
                 my $doc = {
                     fname    => $filename,
                     addedAt => $now,
@@ -451,6 +451,10 @@ if ($SCAN) {
 
                 print "  New file: $filename\n";
                 $col_files->insert($doc);
+
+                # ensure we have will have no duplication in future for this filename
+                $stored_files{ $filename } = $doc;
+
             } else {
                 print "  Update source for: $filename\n";
                 # update collection
