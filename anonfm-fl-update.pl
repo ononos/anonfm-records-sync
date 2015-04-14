@@ -560,8 +560,8 @@ if ($SCHEDULE) {
         $col_files->insert(
             {
                 isSch    => boolean::true,
-                schTime  => DateTime->from_epoch( epoch => $time - 15 * 60 ),
-                t        => DateTime->from_epoch( epoch => $time ),
+                schTime  => DateTime->from_epoch( epoch => $time ),
+                t        => DateTime->from_epoch( epoch => $time - 15 * 60 ),
                 addedAt  => $now,
                 dj       => $data->{dj},
                 schedule => $data->{desc},
