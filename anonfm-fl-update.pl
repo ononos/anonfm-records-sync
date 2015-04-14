@@ -280,8 +280,7 @@ my $client = MongoDB::MongoClient->new(
 );
 $client->dt_type('DateTime');
 
-my ($dbname) = $config->{mongodb} =~ m|.*?/(\w+)|;
-my $db = $client->get_database($dbname);
+my $db = $client->get_database( $client->{_opts}->{db_name} );
 
 die "Can't connect to mongodb, check config file" unless defined $db;
 
