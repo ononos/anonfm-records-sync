@@ -55,6 +55,11 @@ Download schedule page, update db.
 
 Download files from sources and make audio preview, update db.
 
+=item B<--download source>
+
+Download files from source.
+See also YAML config file for B<cache> directories and B<download_dir>.
+
 =back
 
 =cut
@@ -201,9 +206,9 @@ my $MANUAL = 0;
 my $SCAN = 0;
 my $SCHEDULE = 0;
 my $MAKE_PREV = 0;
+my $DOWNLOAD;
 
 my $FORCE = 0;
-my $MONGO_URL;
 
 my @ADD_SRC;
 my @RM_SRC;
@@ -213,7 +218,6 @@ my $CONFIG_FILE;
 GetOptions(
     "help"      => \$HELP,
     "manual"    => \$MANUAL,
-    "mongodb=s" => \$MONGO_URL,
     "add=s"     => \@ADD_SRC,
     "remove=s"  => \@RM_SRC,
     "list"      => \$LIST,
@@ -221,6 +225,7 @@ GetOptions(
     "force"     => \$FORCE,
     "schedule"  => \$SCHEDULE,
     "mkprev"    => \$MAKE_PREV,
+    "download=s"=> \$DOWNLOAD,
     "config=s"  => \$CONFIG_FILE,
 );
 # ------------------------------------------------------
@@ -254,7 +259,7 @@ if ( $config->{mongodb} =~ m|mongodb://(.*?):(.*?)@(.*?):(.*?)/(.*)| ) {
   $db = $client->get_database($3);
 }
 
-die "Can't connect to mongodb: $MONGO_URL" unless defined $db;
+die "Can't connect to mongodb, check config file" unless defined $db;
 
 my $col_source = $db->get_collection('sources');
 my $col_files = $db->get_collection('files');
@@ -574,16 +579,7 @@ if ($MAKE_PREV) {
 
 
         # check if file exist in cache
-        my $fullname;
-
-        foreach ( $config->{download_dir}, @{ $config->{cache} } ) {
-            my $f = path( $_, $filename );
-            if ( $f->is_file ) {
-                $fullname = $f;
-                print "Using cached file $f\n";
-                last;
-            }
-        }
+        my $fullname = file_from_cache($filename);
 
          # download if not exist
         unless ( defined $fullname ) {
@@ -603,6 +599,8 @@ if ($MAKE_PREV) {
                     last;
                 }
             }
+        } else {
+            print "Using cached file $fullname\n";
         }
 
         if ( defined $fullname && $fullname->is_file ) {
@@ -636,9 +634,61 @@ if ($MAKE_PREV) {
     }
 } # / MAKE PREVIEW
 
+if ($DOWNLOAD) {
+    my $source = $col_source->find_one(
+        { url => $DOWNLOAD, rm => { '$ne' => boolean::true } } );
+
+    die qq|Source "$DOWNLOAD" not found, try --list\n|
+      unless defined $source;
+
+    print "Download missing files from source $DOWNLOAD\n";
+
+    for my $filerecord (
+        $col_files->find(
+            {
+                rm           => { '$ne' => boolean::true },
+                'sources.id' => $source->{_id}
+            }
+        )->fields( { fname => 1, sources => 1 } )->all()
+      )
+    {
+        my $filename = $filerecord->{fname};
+        my $url;
+
+        foreach ( @{ $filerecord->{sources} } ) {
+            if ( $_->{id}->value eq $source->{_id}->value ) {
+                $url = $_->{url};
+                last;
+            }
+        }
+        $url //=  $source->{url} . $filename;
+
+        next if ( defined file_from_cache($filename) );
+
+        my $file_download = path( $config->{download_dir}, $filename );
+
+
+        print "==> $filename\n";
+        download( $url, $file_download );
+    }
+}    # /DOWNLOAD
+
 ##########################
 # helpers
 ##########################
+
+# get file from cache or download_dir
+sub file_from_cache {
+    my $filename = shift;
+
+    foreach ( $config->{download_dir}, @{ $config->{cache} } ) {
+        my $f = path( $_, $filename );
+        if ( $f->is_file ) {
+            return $f;
+        }
+    }
+    return;
+}
 
 sub fetch_page {
     my $url = shift;
@@ -680,13 +730,17 @@ sub download {
     print "Downloading: $url\n";
     my $tx = $ua->get($url);
     if ( $tx->success ) {
+        if ($tx->res->headers->content_type() =~ m/html/) {
+            print "!! Failure download, looks file is not audio, but HTML ($url)\n";
+            return 0;
+        }
         $tx->res->content->asset->move_to($filename);
         print "Saved as $filename\n";
         return 1;
     }
     else {
         my ( $err, $code ) = $tx->error;
-        print "Error download \"$url\"\n";
+        print "!! Error download \"$url\"\n";
         print Dumper \$err;
         return 0;
     }
