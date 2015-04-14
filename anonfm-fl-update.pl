@@ -288,7 +288,7 @@ die "Can't connect to mongodb, check config file" unless defined $db;
 my $col_source = $db->get_collection('sources');
 my $col_files = $db->get_collection('files');
 
-# --add
+# --add source
 foreach my $source (@ADD_SRC) {
     die "Format of source is \"URL,DURATION,TITLE\". Fail to add $source"
       unless ( $source =~ m/(.*?),(.*?),(.*)/ );
@@ -316,7 +316,7 @@ foreach my $source (@ADD_SRC) {
     }
 }
 
-# --remove
+# --remove source
 foreach my $item (@RM_SRC) {
     if ($col_source->update({url => $item}, {'$set' => {rm => true}})->{n}) {
         print "removed source: $item\n";
