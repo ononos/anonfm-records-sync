@@ -271,29 +271,17 @@ pod2usage(1) && exit if $HELP || !$CONFIG_FILE;
 
 my $config = Config::Any::YAML->load ($CONFIG_FILE);
 
-my $db;
-
 foreach (qw/mongodb cache download_dir preview_dir schedule/) {
     die "Config file have no \"$_\" key\n" unless exists $config->{$_};
 }
 
-if ( $config->{mongodb} =~ m|mongodb://(.*?):(.*?)@(.*?):(.*?)/(.*)| ) {
-    my $client = MongoDB::MongoClient->new(
-        password => $1,
-        username => $2,
-        host     => "$3:$4",
-        db_name  => $5,
-    );
-    $client->dt_type('DateTime');
-    $db = $client->get_database($5);
-} elsif ( $config->{mongodb} =~ m|mongodb://(.*?):(.*?)/(.*)| ) {
-  my $client = MongoDB::MongoClient->new(
-      host    => "$1:$2",
-      db_name => $3,
-  );
-  $client->dt_type('DateTime');
-  $db = $client->get_database($3);
-}
+my $client = MongoDB::MongoClient->new(
+    host => $config->{mongodb}
+);
+$client->dt_type('DateTime');
+
+my ($dbname) = $config->{mongodb} =~ m|.*?/(\w+)|;
+my $db = $client->get_database($dbname);
 
 die "Can't connect to mongodb, check config file" unless defined $db;
 
