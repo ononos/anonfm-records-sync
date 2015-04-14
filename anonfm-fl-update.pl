@@ -585,11 +585,13 @@ if ($MAKE_PREV) {
 
     my @a = $col_files->find(
         {
-            '$and' => [
-                { isSch      => { '$ne' => boolean::true } },
-                { hasPreview => { '$ne' => boolean::true } },
-                { rm         => { '$ne' => boolean::true } }
-            ]
+            t => {
+                # only < 8 hr from now
+                '$lt' => DateTime->from_epoch( epoch => time() - 8 * 60 * 60 )
+            },
+            { isSch      => { '$ne' => boolean::true } },
+            { hasPreview => { '$ne' => boolean::true } },
+            { rm         => { '$ne' => boolean::true } }
         }
     )->fields( { fname => 1, sources => 1 } )->all();
 
@@ -668,6 +670,10 @@ if ($DOWNLOAD) {
     for my $filerecord (
         $col_files->find(
             {
+                t => {
+                    '$lt' =>
+                      DateTime->from_epoch( epoch => time() - 8 * 60 * 60 )
+                },
                 rm           => { '$ne' => boolean::true },
                 'sources.id' => $source->{_id}
             }
@@ -683,12 +689,11 @@ if ($DOWNLOAD) {
                 last;
             }
         }
-        $url //=  $source->{url} . $filename;
+        $url //= $source->{url} . $filename;
 
         next if ( defined file_from_cache($filename) );
 
         my $file_download = path( $config->{download_dir}, $filename );
-
 
         print "==> $filename\n";
         download( $url, $file_download );
