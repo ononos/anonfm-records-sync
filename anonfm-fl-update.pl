@@ -32,7 +32,7 @@ Local config file, store cache, preview
 
 =item B<--add source,duration,title>
 
-Add source url, google drive id and B<duration> for next update. B<title> is short source describe title
+Add source url or google drive id,  B<duration> for next update, B<title> is short source describe title
 
 =item B<--rm source>
 
@@ -225,8 +225,8 @@ GetOptions(
 );
 # ------------------------------------------------------
 
-pod2usage(1) if $HELP || !$CONFIG_FILE;
-pod2usage(-exitval => 0, -verbose => 2) if $MANUAL;
+pod2usage(-verbose => 2) && exit if $MANUAL;
+pod2usage(1) && exit if $HELP || !$CONFIG_FILE;
 
 my $config = Config::Any::YAML->load ($CONFIG_FILE);
 
@@ -713,6 +713,7 @@ sub recursiveGoogle {
         $html = fetch_page $url;
         last if defined $html;
         sleep 1;
+        print "    Retry..."
     }
 
     die "Couldn't get google drive page id=$id tid=$tid" unless (defined $html);
