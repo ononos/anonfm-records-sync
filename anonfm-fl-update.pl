@@ -28,7 +28,13 @@ Read the manual.
 
 =item B<--config>
 
-Local config file, store cache, preview
+Local config file.
+
+=back
+
+=head2 Source list options
+
+=over 8
 
 =item B<--add source,duration,title>
 
@@ -42,6 +48,12 @@ Remove source.
 
 List sources.
 
+=back
+
+=head2 Crawler options
+
+=over 8
+
 =item B<--scan>
 
 Scan sources for files, update db.
@@ -54,11 +66,32 @@ Download schedule page, update db.
 =item B<--mkprev>
 
 Download files from sources and make audio preview, update db.
+You may want download first files using B<--download>.
+
+=back
+
+=head2 Utility options
+
+=over 8
 
 =item B<--download source>
 
 Download files from source.
 See also YAML config file for B<cache> directories and B<download_dir>.
+
+=item B<--files source>
+
+Show files of source and if have local copy show locations.
+
+Example of output for file "anonfm-12345-virt.mp3" and size 3_023_423:
+
+  | | anonfm-12345-virt.mp3 | 3023423 /var/lib/cache1/anonfm-12345-virt.mp3 | 3023423 /var/lib/cache2/anonfm-12345-virt.mp3
+
+or if have remove mark:
+
+  | REMOVED | anonfm-12345-virt.mp3 | 3023423 /var/lib/cache1/anonfm-12345-virt.mp3 | 3023423 /var/lib/cache2/anonfm-12345-virt.mp3
+
+Also if size for places is different, DIFFSIZE label appear.
 
 =back
 
@@ -206,7 +239,9 @@ my $MANUAL = 0;
 my $SCAN = 0;
 my $SCHEDULE = 0;
 my $MAKE_PREV = 0;
+my $SHOW_SOURCE_FILES;
 my $DOWNLOAD;
+
 
 my $FORCE = 0;
 
@@ -225,6 +260,7 @@ GetOptions(
     "force"     => \$FORCE,
     "schedule"  => \$SCHEDULE,
     "mkprev"    => \$MAKE_PREV,
+    "files=s"   => \$SHOW_SOURCE_FILES,
     "download=s"=> \$DOWNLOAD,
     "config=s"  => \$CONFIG_FILE,
 );
@@ -635,8 +671,7 @@ if ($MAKE_PREV) {
 } # / MAKE PREVIEW
 
 if ($DOWNLOAD) {
-    my $source = $col_source->find_one(
-        { url => $DOWNLOAD, rm => { '$ne' => boolean::true } } );
+    my $source = $col_source->find_one( { url => $DOWNLOAD } );
 
     die qq|Source "$DOWNLOAD" not found, try --list\n|
       unless defined $source;
@@ -672,6 +707,49 @@ if ($DOWNLOAD) {
         download( $url, $file_download );
     }
 }    # /DOWNLOAD
+
+if ($SHOW_SOURCE_FILES) {
+    my $source = $col_source->find_one(
+        {
+            url => $SHOW_SOURCE_FILES,
+        }
+    );
+
+    die qq|Source "$SHOW_SOURCE_FILES" not found, try --list\n|
+      unless defined $source;
+
+    for my $filerecord (
+        $col_files->find(
+            {
+                'sources.id' => $source->{_id}
+            }
+        )->fields( { fname => 1, rm => 1 } )->all()
+      )
+    {
+        my $filename = $filerecord->{fname};
+        my $removed  = $filerecord->{rm};
+        my @downloaded;
+        my ($size, $isSizeDiff);
+
+        foreach ( $config->{download_dir}, @{ $config->{cache} } ) {
+            my $f = path( $_, $filename );
+            if ( $f->is_file ) {
+                my $fsize = -s $f;
+                $size //= $fsize;
+                $isSizeDiff = 1 if $size != $fsize;
+
+                push @downloaded, { f => $f, s => $fsize };
+            }
+        }
+
+        my @flags;
+        push @flags, 'REMOVED' if $removed;
+        push @flags, 'DIFFSIZE' if $isSizeDiff;
+
+        print '| ' . join(' ', @flags) . ' | ' . $filename . ' | ' . join(' | ', map {$_->{s} . ' ' . $_->{f} } @downloaded) . "\n";
+    }
+}
+
 
 ##########################
 # helpers
