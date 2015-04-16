@@ -61,7 +61,7 @@ You can use B<--force> flag for forcing update even no source duration time exci
 
 =item B<--schedule>
 
-Download schedule page, update db.
+Download schedule page, update db. Skip records where timestamp is < time() - 8hr
 
 =item B<--mkprev>
 
@@ -78,6 +78,7 @@ You may want download first files using B<--download>.
 
 Download files from source.
 See also YAML config file for B<cache> directories and B<download_dir>.
+Skip records where timestamp is < time() - 8hr
 
 =item B<--files source>
 
@@ -154,6 +155,7 @@ and "files" collection will contain objects:
 	"size" : null,
 	"sources" : [
 		{
+                        # url is optional, otherwisem you should concat source's url and this.fname
 			"url" : "https://googledrive.com/host/0B6HMhe4i6iXGdDFqQjdKQnEwMFU",
 			"id" : "55224342afad4263e2b90b96"
 		}
@@ -178,7 +180,14 @@ After B<--mkprev>:
 			"id" : "55224342afad4263e2b90b96"
 		}
 	],
-	"t" : ISODate("2015-01-04T19:10:00Z")
+	"t" : ISODate("2015-01-04T19:10:00Z"),
+
+	"schOk" : true,
+
+Field I<schOk> for record indicate that it scheduled,
+i. e. it started before 20minutes of nearest schedule start
+and not later 20 minutes after end that schedule.
+
 
 Example of schedules's record:
 
@@ -192,6 +201,8 @@ Example of schedules's record:
                                                # need schedule move before record start, som djs start recording faster)
 	"t" : ISODate("2012-05-05T14:03:00Z")
 	"schTime" : ISODate("2012-05-05T13:48:00Z"), # REAL TIME STAMP
+
+
 
 Additional fields: B<rm> - boolean - removed or not
 
@@ -218,7 +229,7 @@ use Path::Tiny;
 use FindBin;
 use lib "$FindBin::Bin/lib";
 use Mojo::UserAgent;
-
+use Mojo::Util qw(html_unescape);
 
 use AnonFM::Util;
 use AnonFM::Util::Audio;
@@ -533,42 +544,103 @@ if ($SCAN) {
 } # / SCAN
 
 if ($SCHEDULE) {
-
-    my %stored_schedules;       #  scheduled by timestamps
-
-    foreach my $s (
-        $col_files->find( { isSch => boolean::true } )->fields( { t => 1 } )
-        ->all() )
-    {
-        my $time = $s->{t}->epoch();
-        $stored_schedules{$time} = $s;
-    }
+    print "Download schedule\n";
 
     my $page = fetch_page( $config->{schedule} );
     die unless defined $page;
+
+    my %stored_schedules;       #  scheduled by timestamps
+
+    # "schTime" field is real time stamp of scheduled, "t" - is (schTime-20minuts)
+    foreach my $s (
+        $col_files->find( { isSch => boolean::true } )->fields( { schTime => 1, schedule => 1 } )
+        ->all() )
+    {
+        my $time = $s->{schTime}->epoch();
+        $stored_schedules{$time} = $s;
+    }
 
     my %schedules;
     AnonFM::Util::parseSchedules( \%schedules, $page );
 
     my $now = DateTime->now();
     while ( my ( $time, $data ) = each %schedules ) {
-        if ( exists $stored_schedules{$time} ) {
+        # need unescape schedules anon.fm
+        $data->{desc} = html_unescape $data->{desc};
+
+        next
+          if ( exists $stored_schedules{$time}
+            && $stored_schedules{$time}->{schedule} eq $data->{desc} );
+
+        my $doc = {
+            isSch    => boolean::true,
+            schTime  => DateTime->from_epoch( epoch => $time ),
+            t        => DateTime->from_epoch( epoch => $time - 20 * 60 ),
+            addedAt  => $now,
+            dj       => $data->{dj},
+            schedule => $data->{desc},
+            duration => $data->{duration}
+        };
+
+        # add new schedule
+        $col_files->insert($doc);
+
+        $stored_schedules{$time} = $doc;
+
+    }
+
+    # now Traverse all records and mark scheduled
+    %stored_schedules = ();
+    print "Precalculate covered by scheduled records\n";
+
+    sub updateSchRec {
+        my ($record, $scheduled) = @_;
+        # update only if need
+        if (($record->{schOk} // false) != $scheduled) {
+            $col_files->update( { _id => $record->{_id} },
+                                {
+                                    '$set' => { schOk => $scheduled } } );
+        };
+    }
+
+    foreach my $s (
+        $col_files->find( { isSch => boolean::true } )->fields( { t => 1, duration => 1, rm => 1 } )
+        ->all() )
+    {
+        my $time = $s->{t}->epoch();
+        $stored_schedules{$time} = $s;
+    }
+    my @schTimes = sort keys %stored_schedules;
+    
+    foreach my $record (
+        $col_files->find( { isSch => { '$ne' => boolean::true } } )
+        ->fields( { t => 1, schOk => 1, fname => 1 } )->all() )
+    {
+        my $recTime = $record->{t}->epoch();
+
+        # http://stackoverflow.com/questions/17185169/perl-find-closest-date-in-array
+        my $schNearestDate = ( grep $_ <= $recTime, @schTimes )[-1];
+
+        # there may be no schedule
+        unless (defined $schNearestDate) {
+            updateSchRec( $record, false );
             next;
         }
 
-        # add new schedule
-        $col_files->insert(
-            {
-                isSch    => boolean::true,
-                schTime  => DateTime->from_epoch( epoch => $time ),
-                t        => DateTime->from_epoch( epoch => $time - 15 * 60 ),
-                addedAt  => $now,
-                dj       => $data->{dj},
-                schedule => $data->{desc},
-                duration => $data->{duration}
-            }
-        );
+        my $sch = $stored_schedules{$schNearestDate};
+
+        # We found scheduled that was before this record (and btw, t is -20 minutes),
+        # now check is record started before this schedule ended (and +20 minutes, so +20)
+        if ( $schNearestDate + ( 40 * 60 + $sch->{duration} ) > $recTime
+            && !$sch->{rm} )
+        {
+            updateSchRec( $record, true );
+        }
+        else {
+            updateSchRec( $record, false );
+        }
     }
+
 
 } # / SCHEDULE
 
