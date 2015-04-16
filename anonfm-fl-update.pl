@@ -564,9 +564,13 @@ if ($SCHEDULE) {
     AnonFM::Util::parseSchedules( \%schedules, $page );
 
     my $now = DateTime->now();
+    my %seen_schedules;
+
     while ( my ( $time, $data ) = each %schedules ) {
         # need unescape schedules anon.fm
         $data->{desc} = html_unescape $data->{desc};
+
+        $seen_schedules{$time} = 1;
 
         next
           if ( exists $stored_schedules{$time}
@@ -587,6 +591,19 @@ if ($SCHEDULE) {
 
         $stored_schedules{$time} = $doc;
 
+    }
+
+    # check for removed schedule
+    foreach my $s ( $col_files->find( { isSch => boolean::true } )
+        ->fields( { schTime => 1, rm => 1 } )->all() )
+    {
+        my $time = $s->{schTime}->epoch();
+        my $need_rm = !exists $seen_schedules{$time};
+
+        if ( ( $s->{rm} // false ) != $need_rm ) {
+            $col_files->update( { _id => $s->{_id} },
+                { '$set' => { rm => boolean($need_rm) } } );
+        }
     }
 
     # now Traverse all records and mark scheduled
