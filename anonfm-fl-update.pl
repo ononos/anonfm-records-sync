@@ -371,6 +371,20 @@ if ($SCAN) {
     # At end, we remove dead sources from db, and put to "oldsources" field of collection
     my %confirm_sources;
 
+    # Helper, make text id from  source object. we support only Google
+    # drive  subfolder   support,  need   create  uniq  id   for  EACH
+    # subfolder. Used as key of $confirm_sources.
+    #
+    # $confirm_sources after scanning, will be traversed, and record's
+    # source that  not presented here  will be marked as  removed (rm: true)
+    sub source_to_confirmId {
+        my $recordSource = shift;
+        my $id = $recordSource->{id}->value;
+        return ( exists $recordSource->{folder} )
+          ? $id . $recordSource->{folder}
+          : $id;
+    }
+
     my %files;
 
     foreach my $src (@a) {
@@ -408,7 +422,7 @@ if ($SCAN) {
 
         # google drive id?
         if ($source =~ m|\w{28}|) {
-            eval { @result = recursiveGoogle($source); };
+            eval { @result = recursiveGoogle('.', $source); };
             if ($@) {
                 print Dumper $src;
                 update_source_msg $@;
@@ -456,6 +470,7 @@ if ($SCAN) {
             my $filename = $_->{filename};
             my $size     = $_->{size};
             my $url      = $_->{url};
+            my $folder   = $_->{folder};
 
             my ( $dj, $timestamp ) = AnonFM::Util::parseFilename($filename);
 
@@ -464,20 +479,30 @@ if ($SCAN) {
                 next;
             }
 
-            # if sourceId allredy exist in record, skip
-            if ( exists $stored_files{$filename}
-                     && grep { $_->{id} eq $sourceId } @{$stored_files{$filename}{'sources'}} ) {
-                # mark this source as seen and next
-                $confirm_sources{ $filename }{$sourceId->value} = 1;
-                next;
-            }
-
             my $sourceObj = {id => $sourceId};
             if (defined $url) {
                 $sourceObj->{url} = $url;
             }
+            if (defined $folder) {
+                $sourceObj->{folder} = $folder;
+            }
 
-            # if not event exist record, add to modifier $set name and size
+            # if source allredy exist in record, mark as seen and skip
+            if (
+                exists $stored_files{$filename}
+                && grep {
+                    source_to_confirmId($_) eq source_to_confirmId($sourceObj)
+                } @{ $stored_files{$filename}{'sources'} }
+              )
+            {
+                # mark this source as seen and next
+                $confirm_sources{$filename}{ source_to_confirmId($sourceObj) }
+                  = 1;
+
+                next;
+            }
+
+            # if not event exist record, insert new one
             if ( !exists $stored_files{ $filename } ) {
                 my $doc = {
                     fname    => $filename,
@@ -501,12 +526,12 @@ if ($SCAN) {
             }
 
             # mark this source as seen
-            $confirm_sources { $filename }{$sourceId->value} = 1;
+            $confirm_sources{$filename}{ source_to_confirmId($sourceObj) } = 1;
         }
 
     }
 
-    # check sources. and remove deadlinks by adding "rm" field
+    # check sources. and remove deadlinks by adding "rm" field to source
     foreach my $filename ( keys %stored_files ) {
 
         foreach my $source ( @{ $stored_files{$filename}{'sources'} } ) {
@@ -514,8 +539,10 @@ if ($SCAN) {
 
             next if ( $sourceId->value ~~ @skipped_sources );
 
-            if ( exists $confirm_sources{$filename}{$sourceId->value} ) {
+            if (exists $confirm_sources{$filename}{ source_to_confirmId($sourceId) } )
+            {
                 if ( $source->{rm} // 0 ) {
+
                     # looks this file now present in source, remove "rm" field
                     $col_files->update(
                         {
@@ -908,7 +935,7 @@ sub download {
 
 # recursive traverse google drive pages, get array [{filename => .., url => ..}, ..]
 sub recursiveGoogle {
-    my ($id, $tid) = @_;
+    my ($dirname, $id, $tid) = @_;
 
     my $html;
 
@@ -926,24 +953,26 @@ sub recursiveGoogle {
         $html = fetch_page $url;
         last if defined $html;
         sleep 1;
-        print "    Retry..."
+        print "    Retry...\n";
     }
 
     die "Couldn't get google drive page id=$id tid=$tid" unless (defined $html);
 
     my $data = AnonFM::Util::parseGoogleDrivePage($html);
 
-    foreach (@{$data->{folders}}) {
-        print "==> Entering " . $_->{filename} . "\n";
-        push @result, recursiveGoogle($_->{id}, $tid);
-        print "==> Leaved " . $_->{filename} . "\n";
+    foreach ( @{ $data->{folders} } ) {
+        my $folder = '' . path($dirname, $_->{filename});
+        print "==> Entering $folder\n";
+        push @result, recursiveGoogle( $folder, $_->{id}, $tid );
+        print "==> Leaved $folder\n";
     }
 
-    foreach (@{$data->{files}}) {
+    foreach ( @{ $data->{files} } ) {
         push @result,
           {
+            folder   => $dirname,
             filename => $_->{filename},
-            url      => "https://googledrive.com/host/" . $id . '/' . $_->{filename}
+            url => "https://googledrive.com/host/" . $id . '/' . $_->{filename}
           };
     }
 
