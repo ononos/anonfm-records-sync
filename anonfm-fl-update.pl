@@ -168,7 +168,7 @@ After B<--mkprev>:
 
 	"bitrate" : "192",
 	"duration" : NumberLong(663),
-	"hasPreview" : true,
+	"preview" : "1346082313.mp3.aac",
 
 	"addedAt" : NumberLong(1428309130),
 	"dj" : "unkown",
@@ -705,19 +705,26 @@ if ($MAKE_PREV) {
                 # only < 8 hr from now
                 '$lt' => DateTime->from_epoch( epoch => time() - 8 * 60 * 60 )
             },
-            { isSch      => { '$ne' => boolean::true } },
-            { hasPreview => { '$ne' => boolean::true } },
-            { rm         => { '$ne' => boolean::true } }
+            isSch      => { '$ne' => boolean::true },
+            rm         => { '$ne' => boolean::true }
         }
-    )->fields( { fname => 1, sources => 1 } )->all();
+    )->fields( { fname => 1, sources => 1,  } )->all();
 
     foreach (@a) {
 
         my $filename = $_->{fname};
         my $file_sources = $_->{sources};
-        my $previewName = $_->{_id};
+        my $previewname = $_->{fname} . $config->{preview_ext} // '.aac';
+        my $previewFullpath = path( $config->{preview_dir}, $previewname );
         my $fileId = $_->{_id};
 
+        if ( $previewFullpath->exists() ) {
+            unless ( exists $_->{preview} ) {
+                $col_files->update( { _id => $fileId },
+                    { '$set' => { preview => $previewname } } );
+            }
+            next;
+        }
 
         # check if file exist in cache
         my $fullname = file_from_cache($filename);
@@ -750,7 +757,7 @@ if ($MAKE_PREV) {
 
             AnonFM::Util::Audio::mk_preview(
                 $fullname,
-                path( $config->{preview_dir}, $previewName . '.flv' ),
+                $previewFullpath,
                 {
                     ffmpeg     => $config->{ffmpeg},
                     ffmpeg_cmd => $config->{ffmpeg_cmd}
@@ -764,14 +771,11 @@ if ($MAKE_PREV) {
                         size     => $info->{size}     // 0,
                         bitrate  => $info->{bitrate}  // 0,
                         duration => $info->{duration} // 0,
-                        hasPreview => true
+                        preview => $previewname,
                     }
                 }
             );
-
         }
-
-
     }
 } # / MAKE PREVIEW
 
