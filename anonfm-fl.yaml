@@ -15,5 +15,7 @@ download_dir: /home/anon/tmp/download/
 
 preview_dir: /home/anon/tmp/preview/
 
-ffmpeg_cmd: -acodec libfdk_aac -profile:a aac_he -ab 12k -ac 2 -ar 22050
+preview_ext: .ogg
+
+ffmpeg_cmd: -acodec libvorbis -ab 16k -ac 1 -ar 22050 -af 'volume=1.2'
 ffmpeg: /usr/local/bin/ffmpeg

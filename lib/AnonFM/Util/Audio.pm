@@ -37,7 +37,7 @@ our %badformats;		#  File suffix that have  problem with
 use constant FFMPEG_CMD => "-acodec libfdk_aac -profile:a aac_he -ab 12k -ac  1 -ar 22050";
 use constant FFMPEG => "ffmpeg";
 
-use constant CHUNKS => 30;
+use constant CHUNKS => 15;
 use constant TEMPO => 1.5;
 
 =head1 EXPORTS
@@ -117,7 +117,7 @@ sub mk_preview {
     print " Skipped.\n";
     return $fileinfo;
   } elsif ($duration < 364 ) {	# less 6min trim to 1.5min
-    push @trims, (0, 120);
+    push @trims, (0, 60);
   } else {
       my $chunks;
       if ($duration < 1500) {	# less 25 min
@@ -169,7 +169,7 @@ Default:
 sub sox {
     my ( $in, $outfile, $trims, $options ) = @_;
 
-    my ($sufix) = $outfile =~ m /\.([^.]*)/;
+    my ($sufix) = $outfile =~ m /\.([^.]*)$/;
 
     my $tmpname = $outfile . '.tmp.' . $sufix;
 
