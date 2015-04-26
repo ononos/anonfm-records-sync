@@ -539,7 +539,7 @@ if ($SCAN) {
 
             next if ( $sourceId->value ~~ @skipped_sources );
 
-            if (exists $confirm_sources{$filename}{ source_to_confirmId($sourceId) } )
+            if (exists $confirm_sources{$filename}{ source_to_confirmId($source) } )
             {
                 if ( $source->{rm} // 0 ) {
 
