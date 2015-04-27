@@ -113,7 +113,7 @@ sub mk_preview {
   print " File: $filename " . " duration: " . $fileinfo->{duration} . " bitrate: " . $fileinfo->{bitrate} . "\n";
 
   my @trims;
-  if ($duration == 0) {
+  if (!defined $duration || $duration == 0) {
     print " Skipped.\n";
     return $fileinfo;
   } elsif ($duration < 364 ) {	# less 6min trim to 1.5min
