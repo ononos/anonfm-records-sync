@@ -61,12 +61,14 @@ You can use B<--force> flag for forcing update even no source duration time exci
 
 =item B<--schedule>
 
-Download schedule page, update db. Skip records where timestamp is < time() - 8hr
+Download schedule page, update db.
 
 =item B<--mkprev>
 
 Download files from sources and make audio preview, update db.
 You may want download first files using B<--download>.
+
+Skip records where timestamp is < time() - 8hr
 
 =back
 
@@ -78,6 +80,7 @@ You may want download first files using B<--download>.
 
 Download files from source.
 See also YAML config file for B<cache> directories and B<download_dir>.
+
 Skip records where timestamp is < time() - 8hr
 
 =item B<--files source>
