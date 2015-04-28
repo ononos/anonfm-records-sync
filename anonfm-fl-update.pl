@@ -702,6 +702,31 @@ if ($MAKE_PREV) {
         $sourcesById{ $_->{_id}->value } = $_;
     }
 
+    # Helper
+    # $path_to_file =
+    #   download_in_cache( 'anonfm--20121004-183959-Лемур катта.mp3',
+    #                      \[ { id => .. }, { id => .., url => } ] )
+
+    sub download_in_cache {
+        my ( $filename, $record_sources ) = @_;
+        my $file_download = path( $config->{download_dir}, $filename );
+
+        foreach ( @{$record_sources} ) {
+            next if ( $_->{rm} // 0 );
+
+            my $id = $_->{id};
+
+            # source may have url (google drive)
+            my $url = $_->{url} // $sourcesById{$id}->{url} . $filename;
+
+            print $url . "\n";
+
+            if ( download( $url, $file_download ) ) {
+                return $file_download;
+            }
+        }
+    }
+
     my @a = $col_files->find(
         {
             t => {
@@ -720,11 +745,38 @@ if ($MAKE_PREV) {
         my $previewname = $_->{fname} . $config->{preview_ext} // '.aac';
         my $previewFullpath = path( $config->{preview_dir}, $previewname );
         my $fileId = $_->{_id};
+        my $duration = $_->{duration};
 
         if ( $previewFullpath->exists() ) {
             unless ( exists $_->{preview} ) {
                 $col_files->update( { _id => $fileId },
-                    { '$set' => { preview => $previewname } } );
+                                    { '$set' => { preview => $previewname } } );
+            }
+
+            # make sure file info (duration, bitrate) exists, update if not
+            unless (exists $duration->{duration}) {
+                print "Preview exists, I just extract duration for $filename\n";
+                my $fullname = file_from_cache($filename);
+
+                # if file not exist in cache, download
+                unless (defined $fullname) {
+                    $fullname = download_in_cache($filename, $file_sources);
+                }
+
+                next unless defined $fullname;
+
+                my $info = AnonFM::Util::Audio::file_info($fullname);
+                $col_files->update(
+                    {
+                        _id => $fileId },
+                    {
+                        '$set' => {
+                            size     => $info->{size}     // 0,
+                            bitrate  => $info->{bitrate}  // 0,
+                            duration => $info->{duration} // 0,
+                        }
+                    }
+                );
             }
             next;
         }
@@ -732,24 +784,9 @@ if ($MAKE_PREV) {
         # check if file exist in cache
         my $fullname = file_from_cache($filename);
 
-         # download if not exist
+        # download if not exist
         unless ( defined $fullname ) {
-            my $file_download = path( $config->{download_dir}, $filename );
-
-            foreach ( @{$file_sources} ) {
-                next if ($_->{rm} // 0);
-
-                my $id  = $_->{id};
-                # source may have url (google drive)
-                my $url = $_->{url} // $sourcesById{$id}->{url} . $filename;
-
-                print $url . "\n";
-
-                if ( download( $url, $file_download ) ) {
-                    $fullname = $file_download;
-                    last;
-                }
-            }
+            $fullname = download_in_cache($filename, $file_sources);
         } else {
             print "Using cached file $fullname\n";
         }
