@@ -110,13 +110,15 @@ sub mk_preview {
   my $fileinfo = file_info ($filename);
   $duration = $fileinfo->{duration};
 
+  if (!defined $duration || $duration == 0) {
+      print " Skipped, file is zero.\n";
+      return $fileinfo;
+  }
+  
   print " File: $filename " . " duration: " . $fileinfo->{duration} . " bitrate: " . $fileinfo->{bitrate} . "\n";
 
   my @trims;
-  if (!defined $duration || $duration == 0) {
-    print " Skipped.\n";
-    return $fileinfo;
-  } elsif ($duration < 364 ) {	# less 6min trim to 1.5min
+  if ($duration < 364 ) {	# less 6min trim to 1.5min
     push @trims, (0, 60);
   } else {
       my $chunks;
