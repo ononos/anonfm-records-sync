@@ -301,8 +301,6 @@ my $pid;
     die "can't create pid file"
         if ! $pid->create;
     $pid->guard;
-    sleep(10);
-    
 }
 
 foreach (qw/mongodb cache download_dir preview_dir schedule/) {
