@@ -2,7 +2,7 @@
 
 =head1 NAME
 
-anonfm-fl-update.pl - Update file list from sources
+anonfm-fl-update.pl - Anonfm archive updater
 
 =head1 SYNOPSIS
 
@@ -13,6 +13,15 @@ anonfm-fl-update.pl - Update file list from sources
    --manual   Read this scripts manual.
 
 =cut
+
+=head1 DESCRIPTION
+
+Record fetcher, information aggregator, record preview generator.
+
+Multiple sources used as records archive. Supported anonfm record page,
+nginx/apache index pages, google drive as sources.
+
+Live page http://anonfm.ononos.tk
 
 =head1 OPTIONS
 
@@ -127,12 +136,13 @@ Download and make preview.
     mongodb: mongodb://localhost:27017/anonfm
     
     schedule: http://anon.fm/shed-all.html
+        
+    schedule: http://anon.fm/shed-all.html
     
     #
     # Preview generator
     #
-
-    # Try get files here before downloading
+    
     cache:
       - /home/anon/tmp/cache1/
       - /home/anon/tmp/cache2/
@@ -141,10 +151,13 @@ Download and make preview.
     download_dir: /home/anon/tmp/download/
     
     preview_dir: /home/anon/tmp/preview/
-
-    # optional, set ffmpeg setting
-    ffmpeg_cmd: -acodec libfdk_aac -profile:a aac_he -ab 12k -ac 2 -ar 22050
+    
+    preview_ext: .ogg
+    
+    ffmpeg_cmd: -acodec libvorbis -ab 16k -ac 1 -ar 22050 -af 'volume=1.2'
     ffmpeg: /usr/local/bin/ffmpeg
+    
+    pid: /tmp/anonfm-fl-update.pid
 
 =head1 MongoDB schema
 
