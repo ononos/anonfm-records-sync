@@ -21,7 +21,17 @@ Record fetcher, information aggregator, record preview generator.
 Multiple sources used as records archive. Supported anonfm record page,
 nginx/apache index pages, google drive as sources.
 
+=over 4
+
+=item
+
 Live page http://anonfm.ononos.tk
+
+=item
+
+Source of website: https://github.com/ononos/meteor-anonfm-records
+
+=back
 
 =head1 OPTIONS
 

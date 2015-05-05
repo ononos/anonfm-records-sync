@@ -14,7 +14,9 @@ DESCRIPTION
     Multiple sources used as records archive. Supported anonfm record page,
     nginx/apache index pages, google drive as sources.
 
-    Live page http://anonfm.ononos.tk
+    *   Live page http://anonfm.ononos.tk
+
+    *   Source of website: https://github.com/ononos/meteor-anonfm-records
 
 OPTIONS
     --help  Show the brief help information.
