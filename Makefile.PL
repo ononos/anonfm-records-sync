@@ -15,6 +15,7 @@ WriteMakefile(
         'Mojolicious'        => '5.54',
         'MongoDB'            => "0.702.2",
         'Config::Any::YAML'  => 0,
+        'PID::File'          => '0.32'
       },
 
 );

@@ -233,6 +233,7 @@ use FindBin;
 use lib "$FindBin::Bin/lib";
 use Mojo::UserAgent;
 use Mojo::Util qw(html_unescape);
+use PID::File;
 
 use AnonFM::Util;
 use AnonFM::Util::Audio;
@@ -284,6 +285,23 @@ pod2usage(-verbose => 2) && exit if $MANUAL;
 pod2usage(1) && exit if $HELP || !$CONFIG_FILE;
 
 my $config = Config::Any::YAML->load ($CONFIG_FILE);
+
+# exit if still running
+{
+    my $pid_file = path($config->{pid} // '/tmp/anonfm-fl-update.pid');
+    print "Pid: $pid_file\n";
+
+    my $pid = PID::File->new(file => $pid_file);
+    if ($pid->running) {
+        print "anonfm-fl-update still running\n";
+        exit 1;
+    }
+    unlink $pid_file;
+
+    die "can't create pid file"
+        if ! $pid->create;
+    $pid->guard;
+}
 
 foreach (qw/mongodb cache download_dir preview_dir schedule/) {
     die "Config file have no \"$_\" key\n" unless exists $config->{$_};
