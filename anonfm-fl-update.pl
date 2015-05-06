@@ -777,7 +777,7 @@ if ($MAKE_PREV) {
             isSch      => { '$ne' => boolean::true },
             rm         => { '$ne' => boolean::true }
         }
-    )->fields( { fname => 1, sources => 1,  } )->all();
+    )->fields( { fname => 1, sources => 1, duration => 1, preview => 1 } )->all();
 
     foreach (@a) {
 
