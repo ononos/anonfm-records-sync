@@ -786,7 +786,6 @@ if ($MAKE_PREV) {
         my $previewname = $_->{fname} . $config->{preview_ext} // '.aac';
         my $previewFullpath = path( $config->{preview_dir}, $previewname );
         my $fileId = $_->{_id};
-        my $duration = $_->{duration};
 
         if ( $previewFullpath->exists() ) {
             unless ( exists $_->{preview} ) {
@@ -795,7 +794,7 @@ if ($MAKE_PREV) {
             }
 
             # make sure file info (duration, bitrate) exists, update if not
-            unless (exists $duration->{duration}) {
+            unless (exists $_->{duration}) {
                 print "Preview exists, I just extract duration for $filename\n";
                 my $fullname = file_from_cache($filename);
 
