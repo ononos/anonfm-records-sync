@@ -787,6 +787,8 @@ if ($MAKE_PREV) {
         my $previewFullpath = path( $config->{preview_dir}, $previewname );
         my $fileId = $_->{_id};
 
+        next if (exists $_->{duration} && $_->{duration} == 0);
+
         if ( $previewFullpath->exists() ) {
             unless ( exists $_->{preview} ) {
                 $col_files->update( { _id => $fileId },
