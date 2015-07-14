@@ -766,6 +766,7 @@ if ($MAKE_PREV) {
                 return $file_download;
             }
         }
+	return undef;
     }
 
     my @a = $col_files->find(
